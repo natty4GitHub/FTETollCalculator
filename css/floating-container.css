@@ -1,0 +1,127 @@
+#map {
+    height: 100%;
+    width: 100%;
+    /*z-index: -1;*/
+   overflow: scroll;
+}
+
+#floating-panel {
+    height: 750 px;
+    width: 300px;
+    position: absolute;
+    top: 10px;
+    right:10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 1px grey;
+    z-index: 5;
+}
+
+#floating-panel-Header {
+    top: -16px;
+    height: 35px;
+    background-color: #009d56;
+    text-align: center;
+    color: #FFF;
+    padding-top: 10px;
+    border-radius: 5px;
+/*  font-size: 150%;*/
+}
+
+#calc-title {
+    padding-top: 4px;
+}
+
+span.axlepayment {
+    background-color: white;
+    color: black;
+    position: relative;
+    text-align: left;
+    font-size: 15px;
+}
+
+.spanpadding {
+    padding-left: 5px;
+}
+
+.spanheader {
+    font-size: 15px;
+    font-weight: bolder;
+    font-family: sans-serif;
+    padding-left: 15px;
+    padding-right: 4px;
+}
+
+.spanheader-trips {
+    font-size: 15px;
+    font-weight: bolder;
+    font-family: sans-serif;
+    padding-left: 0px;
+    padding: 12px;
+    text-align: left;
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+
+#container-fluid {
+    position: absolute;
+    text-align: left;
+    }
+/* Optional: Makes the sample page fill the window. */
+
+.curtain-menu-shadow {
+    padding-left: 5px;
+    padding-top: 0px;
+    box-shadow: 2px 2px 1px grey;
+}
+
+.dropdown-menu-axle {
+    width: 40px;
+    text-overflow: ellipsis;
+    height: auto;
+}
+
+.bottom {
+    border-bottom: 1px solid #ccc;
+    padding-top: 5px;
+}
+
+.sidebar:not(:last-child){
+  border-right: 1px solid #ccc;
+  padding-left: 5px;
+/*  text-align:justify;
+  position: relative;*/
+}
+
+.bottom-between-dropdowns {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid #fff;
+}
+
+.button-trips-dropdown {
+    width: 270px;
+    text-align: center;
+    height: 25px;
+    border: none;
+}
+
+.submit-button {
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.row:not(:last-child) {
+    border-bottom: 0px solid #ccc;
+}
+
+.col-xs-5:not(:last-child) {
+    border-right: 0px solid #ccc;
+}
+
+.printer-span-padding{
+  padding-left: 17px;
+}

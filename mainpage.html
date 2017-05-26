@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sun Pass Toll Calculator</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+        width: 100%;
+      }
+      #floating-panel {
+      position: absolute;
+      top: 10px;
+      left: 25%;
+      z-index: 5;
+      background-color: #fff;
+      padding: 5px;
+      border: 1px solid #999;
+      text-align: center;
+      font-family: 'Roboto','sans-serif';
+      line-height: 30px;
+      padding-left: 10px;
+    }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!--<h3> My Google Maps Demo</h3>-->
+    <div id="floating-panel" title="Trip Calculator">
+      <input onclick="clearMarkers();" type=button value="Hide Interchanges">
+      <input onclick="showMarkers();" type=button value="Show All Interchanges">
+      <input onclick="deleteMarkers();" type=button value="Delete Interchanges">
+    </div>
+    <div id="map"></div>
+   <p>Click on the map to add interchanges </p>
+    <script>
+    var map;
+    var markers = [];
+    function initMap(){
+      var orlando = {lat: 28.46, lng: -81.431};
+      map = new google.maps.Map(document.getElementById('map'),
+   {
+     zoom: 2,
+     center: orlando
+   });
+
+    var marker = new google.maps.Marker({
+      position: orlando,
+      map: map
+    });
+map.addListener('click', function(event){
+  console.log(event.latLng);
+  setUpMarkers(event.latLng);
+});
+
+      setUpMarkers(locations);
+    }
+    function setUpMarkers(positions){
+    for(var j = 0; j < positions.length;j++){
+        var mark =  new google.maps.Marker({
+      position: new google.maps.latLng(positions[j][1], positions[j][2]),
+      map : map
+      });
+      markers.push(mark);
+    }
+    }
+
+    function clearMarkers(){
+      setMapOnAll(null);
+    }
+
+    function showMarkers(map){
+      for(var i=0;i< markers.length;i++){
+      markers[i].setMap(map);
+     }
+    }
+
+  /*  var markers = [
+      ['Title A', 3.180967,101.715546, 1],
+         ['Title B', 3.200848,101.616669, 2],
+         ['Title C', 3.147372,101.597443, 3],
+         ['Title D', 3.19125,101.710052, 4]
+    ];*/
+
+var locations = [
+  ['Title A', 3.180967,101.715546, 1],
+     ['Title B', 3.200848,101.616669, 2],
+     ['Title C', 3.147372,101.597443, 3],
+     ['Title D', 3.19125,101.710052, 4]
+];
+
+var marker2, i;
+
+for(i =0 ; i < locations.length;i++){
+  marker2 = new google.maps.Marker({
+    position: new google.maps.latLng(locations[i][1], locations[i][2]),
+    map: map
+  });
+}
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDpKvus3VMT0RQuDbJlWXZiZE2k4lQlrI&callback=initMap"
+    async defer></script>
+  </body>
+</html>
