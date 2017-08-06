@@ -3,17 +3,19 @@
 
 <head>
     <title>Sun Pass Toll Calculator</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name= "viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/switch-toggle.css">
     <link rel="stylesheet" type="text/css" href="css/floating-container.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <link href="bootstrap.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="mapobjects.js"></script>
+  <!--  <link href="bootstrap.css" rel="stylesheet">
     <link href="bootstrap-switch.css" rel="stylesheet">
     <script src="jquery.js"></script>
-    <script src="bootstrap-switch.js"></script>
-    <script type="text/javascript" src="res/mobileSchema.json"></script>
+    <script src="bootstrap-switch.js"></script>-->
+  <!--  <script type="text/javascript" src="res/mobileSchema.json"></script>-->
     <meta charset="utf-8">
     <style>
         /* Always set the map height explicitly to define the size of the div
@@ -48,7 +50,7 @@
         <span class="axlepayment spanheader" title="How many axles in my motor ?">
                 Axle Count
                 <a href="#">?</a>
-              </span>
+        </span>
         <span class="dropdown">
                   <button class="btn btn-default dropdown-toggle curtain-menu-shadow" type="button" data-toggle="dropdown"
                   style="width:25px;height:25px;padding-top:1px;padding-left:3px;border:none">2
@@ -65,7 +67,7 @@
         </span>
         <div class="container-fluid">
             <span class="dropdown">
-            <button class="btn btn-default dropdown-toggle curtain-menu-shadow" type="button" data-toggle="dropdown">
+            <button class="btn btn-default curtain-menu-shadow" type="button" data-toggle="dropdown">
           <!--  <img src="http://104.131.96.12:3001/api/image/sunpass_logo.png">-->
           <img src="img/SUNPASS_button.png">
             <span class="caret"></span>
@@ -88,7 +90,7 @@
                 Trip Start
             </div>
             <div class="dropdown">
-                <button id="btnSelectRegion" class="btn btn-default dropdown-toggle curtain-menu-shadow button-trips-dropdown" type="button" data-toggle="dropdown">
+                <button id="btnSelectRegion" onclick="goGetRegions()" class="btn btn-default dropdown-toggle curtain-menu-shadow button-trips-dropdown" type="button" data-toggle="dropdown">
               <span>Select Region</span>
             <span class="caret"></span>
           </button>
@@ -327,6 +329,8 @@
             ['Title D', 28.44, -81.432, 4]
         ];
 
+      var locationData;
+
         var icon = {
             url: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Florida%27s_Turnpike_shield.png'
         };
@@ -352,17 +356,78 @@
                 position: orlando,
                 map: map
             });
-          TestMarker();
 
-            //map.data.loadGeoJson('doc.GeoJson');
-            var results = 'https://fltpkprod.gtntechsol.com/ftbrapi/schema/mobileSchema';
-            var facilitiesJson = JSON.parse('res/mobileSchema.json');
-        //    processLocations(facilitiesJson);
-            JSON.verify = function(s){ try { JSON.parse(s); return true; } catch (e) { return false; }};
-            var objectlength = facilitiesJson.results.schemaData.routeSections.length;
+            var getLocationsUrl  = "http://192.168.200.16:9991/exchanges";
+            var googleUrl = "http://www.google.com"
+            //var getTollPlazasUrl = "http://192.168.200.16:9991/tollPlazas"
+//156.75.254.31
+            var getTollPlazasUrl = "http://192.168.1.141:9991/tollPlazas"
 
-          //  document.getElementsByTagName('head')[0].appendChild(script);
+
+
+            axios.get(getTollPlazasUrl)
+                  .then(function(response){
+                    if(response.status == 200){
+                    // console.log(response.data);
+                      locationData = JSON.parse(response.data.content);
+                      console.log(locationData);
+                      goGetRegions(locationData);
+                    }
+                  })
+                  .catch(function(error){
+                    console.log(error);
+                  });
+
+
+        /*    axios.get(getLocationsUrl)
+                    .then(function(response){
+                    //   locationData = response.data;
+                      console.log(response.status);
+                      console.log(response.data);
+                      locationData = JSON.parse(response.data.content);
+                  //  console.log(locationData.length);
+                  //  console.log(locationData);
+
+                  addLatLongs(locationData);
+                    })
+                    .catch(function(error){
+                      console.log(error);
+                    }); */
+      //  console.log(locationData.length);
+        //TestMarker();
+
         }
+
+        function goGetRegions(locationData){
+          //console.log(locationData);
+        for(var key in locationData){
+          console.log("for Key:" + key);
+          for(var j = 0; j<locationData[key].length; j++){
+            console.log(locationData[key][j]);
+            console.log(locationData[key][j][0]);
+            console.log(locationData[key][j][1]);
+          var plazas =  new google.maps.LatLng(locationData[key][j][0],locationData[key][j][1] );
+          //  var plazas = locationData[key][j][1];
+             addMarker(plazas);
+          }
+          }
+
+        }
+
+        function addLatLongs(locationData) {
+          console.log(locationData.length);
+            for (var i = 0; i < locationData.length; i++) {
+                var exchanges = new google.maps.LatLng(locationData[i][1], locationData[i][0]);
+             //console.log(locationData[i][0]);
+             //console.log(locationData[i][1])
+                addMarker(exchanges);
+            }
+        }
+
+        function ActualMarker(){
+          console.log(this.responseText);
+        }
+
        function processLocations(fac){
           for(var i =0; i< fac.results.schemaData.routeSections.length; i++){
             for(var j =0; j< fac.results.schemaData.routeSections[i].coordinates.length;j++)
@@ -371,7 +436,7 @@
               addMarker(latlng);
           }
         }
-
+//  fillColor: '#B3B337'
         function addMarker(location) {
             marker = new google.maps.Marker({
                 position: location,
@@ -382,10 +447,12 @@
                     fillOpacity: 1,
                     strokeOpacity: .8,
                     strokeWeight: 1,
-                    fillColor: '#B3B337'
+                    fillColor: '#f4414a'
                 },
             });
         }
+
+
 
         function TestMarker() {
             for (var i = 0; i < locations.length; i++) {
