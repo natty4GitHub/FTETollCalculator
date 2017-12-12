@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+  crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+  integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+   crossorigin="anonymous"></script>
+
     <title>Sun Pass Toll Calculator</title>
-    <meta name= "viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/switch-toggle.css">
-    <link rel="stylesheet" type="text/css" href="css/floating-container.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <meta name="viewport" content="initial-scale=1.0">
+    <!--<meta name= "viewport" content="width=device-width, initial-scale=1">-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+
+
+
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="mapobjects.js"></script>
   <!--  <link href="bootstrap.css" rel="stylesheet">
     <link href="bootstrap-switch.css" rel="stylesheet">
     <script src="jquery.js"></script>
@@ -20,9 +28,6 @@
     <style>
         /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-
-
-
         html,
         body {
             height: 100%;
@@ -33,16 +38,19 @@
 </head>
 
 <body>
-    <script src="https://www.w3schools.com/lib/w3.js"></script>
+
+
+  <!--  <script src="https://www.w3schools.com/lib/w3.js"></script>
     <div id="floating-panel" title="Toll Calculator">
         <div id="floating-panel-Header" title="Trip Calculator">
           <span style="">
               <img src="img/Calculator_Icon.png">
           <!--    <label>Trip Calculator</span>-->
-            <span style="padding-left:3px;font-size:110%;"> Trip Calculator </span>
+      <!--      <span style="padding-left:3px;font-size:110%;"> Trip Calculator </span>
             </span>
         </div>
-        <span class="container-fluid" title="How do i pay?">
+        <!-- payments and axle dropdowns -->
+    <!--    <span class="container-fluid" title="How do i pay?">
               <span  class="axlepayment spanheader" style="padding-right: 10px;">
                 Payment Type
                 <a href="#">?</a>
@@ -64,11 +72,13 @@
             <li><a href="#">?</a></li>
         </ul>
         </span>
-        </span>
-        <div class="container-fluid">
+      </span> -->
+      <!-- Sunpass and Axle -->
+      <!--  <img src="http://104.131.96.12:3001/api/image/sunpass_logo.png">-->
+    <!--    <div class="container-fluid">
             <span class="dropdown">
-            <button class="btn btn-default curtain-menu-shadow" type="button" data-toggle="dropdown">
-          <!--  <img src="http://104.131.96.12:3001/api/image/sunpass_logo.png">-->
+            <button class="btn btn-default dropdown-toggle curtain-menu-shadow" type="button" data-toggle="dropdown">
+
           <img src="img/SUNPASS_button.png">
             <span class="caret"></span>
             </button>
@@ -83,27 +93,78 @@
             <span>
             <img src="img/2 Axles.png" class="spanpadding" style="padding-left:25px;">
           </span>
-        </div>
-        <div class="bottom" style="padding-top:10px;"></div>
+        </div> -->
+
+        <!-- Trip calculation  ORIGIN-->
+        <!--temp
+
+        $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+            var selected = $(e.currentTarget).val();
+             loadFacilitiesForRegion(selected,getFacilityurl);
+        });
+
+
+
+
+
+
+
+      -->
+
+       <div class="bottom" style="padding-top:10px;"></div>
         <div class="container-fluid">
             <div class="spanheader-trips">
                 Trip Start
             </div>
             <div class="dropdown">
-                <button id="btnSelectRegion" onclick="goGetRegions()" class="btn btn-default dropdown-toggle curtain-menu-shadow button-trips-dropdown" type="button" data-toggle="dropdown">
-              <span>Select Region</span>
+            <!--    <button id="btnSelectRegion" class="btn btn-default dropdown-toggle curtain-menu-shadow button-trips-dropdown" type="button" data-toggle="dropdown">-->
+                  <button id="btnSelectRegion" class="curtain-menu-shadow button-trips-dropdown" type="button" data-toggle="dropdown">
+                    <div text-align = "left">Select Region
+                    </div>
+                <!--  <span class ="span-content-text">Select Region</span>
+                 <span  class="caret .span-content-caret"></span>-->
+               </button>
+            <!--    <ul class="dropdown-menu">
+                    <li><a href="#">Tampa</a></li>
+                    <li><a href="#">Miami</a></li>
+                    <li><a href="#">Orlando</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">?</a></li>
+                </ul>-->
+            </div>
+            <div class="bottom-between-dropdowns"></div>
+          <!--  <div class="bottom-between-dropdowns"></div>
+            <div class="dropdown" id="srcFacilityDrdn">
+                <button id="btnSelectFacility" class="btn btn-default dropdown-toggle curtain-menu-shadow button-trips-dropdown" type="button" data-toggle="dropdown">
+            <span>Select Facility</span>
             <span class="caret"></span>
-          </button>
-                <ul class="dropdown-menu">
+            </button>
+                <ul id = "srcFacilityList" class="dropdown-menu button-dropdown-menu-trips">
                     <li><a href="#">Tampa</a></li>
                     <li><a href="#">Miami</a></li>
                     <li><a href="#">Orlando</a></li>
                     <li class="divider"></li>
                     <li><a href="#">?</a></li>
                 </ul>
-            </div>
-            <div class="bottom-between-dropdowns"></div>
-            <div class="dropdown">
+            </div>-->
+
+            <!-- <div class="dropdown" id="srcExitsDrdn">
+                  <button id="btnSelectExit" class="btn btn-default dropdown-toggle curtain-menu-shadow button-trips-dropdown" type="button" data-toggle="dropdown">
+                    <span>Exit</span>
+                    <span class="caret"></span>
+                  </button>
+                  <ul id ="srcExitList" class="dropdown-menu button-dropdown-menu-trips">
+                      <li><a href="#">Tampa</a></li>
+                      <li><a href="#">Miami</a></li>
+                      <li><a href="#">Orlando</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">?</a></li>
+                  </ul>
+              </div>-->
+
+
+
+          <!--  <div class="dropdown">
                 <button id="btnSelectFacility" class="btn btn-default dropdown-toggle curtain-menu-shadow button-trips-dropdown" type="button" data-toggle="dropdown">
             <span>Select Facility</span>
           <span class="caret"></span>
@@ -115,9 +176,9 @@
                     <li class="divider"></li>
                     <li><a href="#">?</a></li>
                 </ul>
-            </div>
+            </div> -->
             <div class="bottom-between-dropdowns"></div>
-            <div class="dropdown">
+          <!--  <div class="dropdown">
                 <button id="btnSelectExit" class="btn btn-default dropdown-toggle curtain-menu-shadow button-trips-dropdown" type="button" data-toggle="dropdown">
         <span>Exit</span>
         <span class="caret"></span>
@@ -129,9 +190,11 @@
                     <li class="divider"></li>
                     <li><a href="#">?</a></li>
                 </ul>
-            </div>
+            </div> -->
         </div>
-        <div class="container-fluid">
+
+          <!-- Trip calculation  DESTINATION-->
+      <!--  <div class="container-fluid">
             <div class="spanheader-trips">
                 Trip End
             </div>
@@ -176,9 +239,12 @@
                     <li><a href="#">?</a></li>
                 </ul>
             </div>
-        </div>
+        </div> -->
+
         <div class="bottom-between-dropdowns" style="padding-top:0px;"></div>
-        <div class="container-fluid" style="padding-bottom:0px;">
+
+        <!--Traffic and Reset Maps -->
+      <!--  <div class="container-fluid" style="padding-bottom:0px;">
             <span class="row">
                 <span class="col-xs-5" style="padding-left:30px;">
           <button id="btnTraffic" type="button" class="SubmitButtonClass submit-button" style="border:none;">
@@ -190,10 +256,14 @@
         <img src="img/Reset Icon.png">
         <value> Reset </value>
       </button></span>
-      </div>
+    </div> -->
+
+        <!-- Express Lanes and Time Day selection -->
         <div class="bottom" style="padding-top:0px;padding-bottom:0px"></div>
         <div class="bottom-between-dropdowns" style="padding-bottom:0px; padding-top:3px;"></div>
-          <div class="container-fluid">
+
+
+   <!-- <div class="container-fluid">
             <span> <label style="padding-top:8px;"> Express Lanes Available
             </label>
           </span>
@@ -253,9 +323,11 @@
          <div>
            <p>Express Lane rate is approximation based on available historical data.</p>
          </div>
-          </div>
+       </div> -->
           <div class="bottom"></div>
-          <div class="containter-fluid">
+
+          <!-- Route Detail, Printer and Sunpass -->
+    <!--      <div class="containter-fluid">
             <span>
               <label class="spanpadding printer-span-padding">
                 Route Detail
@@ -272,9 +344,10 @@
                 <span class="spanpadding printer-span-padding ">
                     <img src="img/SUNPASS_button.png">
                   </span>
-              </div>
+              </div> -->
                  <div class="bottom-between-dropdowns" style="padding-bottom:0px; padding-top:3px;"></div>
-             <div class="container-fluid">
+              <!-- Numbers General Toll and Express toll -->
+          <!--   <div class="container-fluid">
                <table>
                <thead>
                    <tr>
@@ -298,8 +371,8 @@
                    </tr>
                  </tbody>
                </table>
-              </div>
-    </div>
+             </div> -->
+  <!-- </div>
     <!--<h3> My Google Maps Demo</h3>-->
 
     <div id="map"></div>
@@ -350,7 +423,40 @@
           /* var script = document.createElement('script');
                 script.src = 'https://fltpkprod.gtntechsol.com/ftbrapi/schema/mobileSchema';
                 document.getElementsByTagName('head')[0].appendChild(script);*/
+                
+                      //////////////////////////////// Legend Code ///////////////////////////
+                    /*  var iconBaseUrl = 'img/';
 
+                      var legendIcons = {
+                        interchange: {
+                          name: 'Interchange',
+                          iconL: iconBaseUrl + 'Reset Icon.png'
+                        },
+                        tollPoint: {
+                          name: 'Mainline Toll Point',
+                          iconL: iconBaseUrl + 'Traffic Cars.png'
+                        },
+                        tollLanes: {
+                          name: 'Toll Lanes',
+                          iconL: iconBaseUrl + 'Printer_Icon.png'
+                        },
+                        servicePlaza: {
+                          name: 'Service Plaza',
+                          iconL: iconBaseUrl + 'GasPump_icon.png'
+                        },
+                      };*/
+
+                      /*    var legend = document.getElementById('legend');
+                          for(var key in legendIcons){
+                            var type = legendIcons[key];
+                            var name = type.name;
+                            var iconL = type.iconL;
+                            var divlegend = document.createElement('div');
+                            divlegend.innerHTML = '<p style="clear:both;">&nbsp&nbsp'+ name + '<img style="" src="' + iconL + '" align="right">&nbsp</p>' ;
+                            legend.appendChild(divlegend);
+                          }*/
+
+                      ///////////////////Legend Code End////////////////////////////////////////
 
             var marker = new google.maps.Marker({
                 position: orlando,
@@ -397,6 +503,41 @@
         //TestMarker();
 
         }
+
+        //  var tollPath = new google.maps.Polyline({});
+
+
+
+        /*    axios.get(getTollPlazasUrl)
+              .then(function(response) {
+                if (response.status == 200) {
+                  // console.log(response.data);
+                  locationData = JSON.parse(response.data.content);
+                  console.log(locationData);
+                  // goGetRegions(locationData);
+                }
+              })
+              .catch(function(error) {
+                console.log(error);
+              });*/
+
+
+        /*    axios.get(getLocationsUrl)
+                    .then(function(response){
+                    //   locationData = response.data;
+                      console.log(response.status);
+                      console.log(response.data);
+                      locationData = JSON.parse(response.data.content);
+                  //  console.log(locationData.length);
+                  //  console.log(locationData);
+
+                  addLatLongs(locationData);
+                    })
+                    .catch(function(error){
+                      console.log(error);
+                    }); */
+        //  console.log(locationData.length);
+        //TestMarker();
 
         function goGetRegions(locationData){
           //console.log(locationData);

@@ -9,22 +9,22 @@
     height: 750 px;
     width: 300px;
     position: absolute;
-    top: 10px;
+    top: 11px;
     right:10px;
     background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 2px 2px 1px grey;
+    border-radius: 2px;
+    box-shadow: 1px 2px 1px grey;
     z-index: 5;
 }
 
 #floating-panel-Header {
     top: -16px;
-    height: 35px;
+    height: 51px;
     background-color: #009d56;
     text-align: center;
     color: #FFF;
     padding-top: 10px;
-    border-radius: 5px;
+    border-radius: 0px;
 /*  font-size: 150%;*/
 }
 
@@ -32,7 +32,22 @@
     padding-top: 4px;
 }
 
-span.axlepayment {
+
+#container-fluid {
+    position: absolute;
+    text-align: left;
+    }
+
+
+
+
+.label{
+  width: 100px;
+  display: inline-block;
+
+}
+
+.axlepayment {
     background-color: white;
     color: black;
     position: relative;
@@ -63,14 +78,11 @@ span.axlepayment {
     padding-top: 8px;
 }
 
-#container-fluid {
-    position: absolute;
-    text-align: left;
-    }
+
 /* Optional: Makes the sample page fill the window. */
 
 .curtain-menu-shadow {
-    padding-left: 5px;
+    padding-left: 0px;
     padding-top: 0px;
     box-shadow: 2px 2px 1px grey;
 }
@@ -103,9 +115,22 @@ span.axlepayment {
 
 .button-trips-dropdown {
     width: 270px;
-    text-align: center;
     height: 25px;
     border: none;
+    padding-right: 0px;
+}
+
+.button-dropdown-menu-trips{
+  width: 270px;
+  height: 100px;
+}
+
+
+.span-content-text{
+  text-align: left;
+}
+.span-content-caret{
+  text-align: right;
 }
 
 .submit-button {

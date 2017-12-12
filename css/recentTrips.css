@@ -1,0 +1,24 @@
+.recentTripLabel{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display:block;
+  color:black;
+}
+
+.floating-panel-two{
+  height: 280px;
+  width: 138px;
+  position: fixed;
+  top: 200px;
+  left:10px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 1px 2px 1px grey;
+   z-index: 4;
+}
+.button-recent-trip{
+  width: 100px;
+  height: 750 px;
+  text-align: center;
+}

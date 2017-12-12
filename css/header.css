@@ -1,0 +1,12 @@
+.FDOT-logo {
+position: fixed;
+height:98px;
+width:158px;
+background: #fff;
+z-index:4;
+}
+
+.app-Store{
+  top: 300;
+  left:10px;
+}

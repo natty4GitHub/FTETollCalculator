@@ -1,113 +1,1402 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Sun Pass Toll Calculator</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
+
+<head>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <title>Sun Pass Toll Calculator</title>
+  <meta name="viewport" content="initial-scale=1.0">
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="css/switch-toggle.css">
+  <link rel="stylesheet" type="text/css" href="css/floating-container.css">
+  <link rel="stylesheet" type="text/css" href="css/legends.css">
+  <link rel="stylesheet" type="text/css" href="css/recentTrips.css">
+  <link rel="stylesheet" type="text/css" href="css/header.css">
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="js/loadRegion.js"></script>
+  <script src="js/getFacility.js"></script>
+  <script src="js/getExitsForRegionAndFacility.js"></script>
+  <script src="js/getQualifiedExits.js"></script>
+  <script src="js/getTollRoutes.js"></script>
+  <script src="js/Queue.js"></script>
+  <style>
+    /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-      #map {
-        height: 100%;
-        width: 100%;
-      }
-      #floating-panel {
-      position: absolute;
-      top: 10px;
-      left: 25%;
-      z-index: 5;
-      background-color: #fff;
-      padding: 5px;
-      border: 1px solid #999;
-      text-align: center;
-      font-family: 'Roboto','sans-serif';
-      line-height: 30px;
-      padding-left: 10px;
+
+    /* Optional: Makes the sample page fill the window. */
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
     }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <!--<h3> My Google Maps Demo</h3>-->
-    <div id="floating-panel" title="Trip Calculator">
-      <input onclick="clearMarkers();" type=button value="Hide Interchanges">
-      <input onclick="showMarkers();" type=button value="Show All Interchanges">
-      <input onclick="deleteMarkers();" type=button value="Delete Interchanges">
+  </style>
+</head>
+
+<body onload="loadRecentTripsFromLocal ()">
+  <div id="container-fluid" style="position:fixed;top:1px;left:1px;z-index:4;background:#fff">
+    <span>
+      <img src="img/FDOT_TC_F.png">
+    </span>
+  </div>
+  <div class="header">
+    <nav class="navbar navbar-default" style="position:fixed;z-index:4;background:#009d56;top:10px;left:137px;">
+      <div class="container-fluid">
+        <ul class="nav navbar-nav">
+          <li><a href="#" style="color:white"><img src="img/PaymentMethods_icon.png"> Payment Options</a></li>
+          <li><a href="#" style="color:white"><img src="img/Toll_Violations.png"> Toll Violations</a></li>
+          <li><a href="#" style="color:white"><img src="img/UsingCalculator_Icon.png"> Using the calculator</a></li>
+          <li><a href="#" style="color:white"><img src="img/Resources_Icon.png"> Resources</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div id="container-fluid" style="position:fixed;top:100px;left:10px;z-index:4;background:none">
+    <img src="img/Apple_App_Store_Button.png">
+  </div>
+  <div id="container-fluid" style="position:fixed;top:140px;left:10px;z-index:4;background:none">
+    <img src="img/Google_Play_Button.png">
+  </div>
+
+  <div id="floating-panel" title="Toll Calculator">
+    <div id="floating-panel-Header" title="Trip Calculator">
+      <span style="">
+          <img src="img/Calculator_Icon.png">
+        <!--  <label>Trip Calculator</span> -->
+      <span style="padding-left:3px;font-size:110%;"> Trip Calculator </span>
+      </span>
     </div>
-    <div id="map"></div>
-   <p>Click on the map to add interchanges </p>
-    <script>
-    var map;
-    var markers = [];
-    function initMap(){
-      var orlando = {lat: 28.46, lng: -81.431};
-      map = new google.maps.Map(document.getElementById('map'),
-   {
-     zoom: 2,
-     center: orlando
-   });
+    <div class="bottom-between-dropdowns"></div>
+    <!-- payments and axle dropdowns -->
+    <div class="container-fluid" title="How do i pay?">
+      <span class="axlepayment spanheader" style="padding-right: 5px;">
+            Payment Type
+            <a href="#">?</a>
+          </span>
+      <span class="axlepayment spanheader" title="How many axles in my motor ?">
+            Axle Count
+            <a href="#">?</a>
+          </span>
+    </div>
+    <div class="bottom-between-dropdowns"></div>
+    <div>
+      <span style="padding-left:20px;padding-right:20px">
+      <select class="selectpicker curtain-menu-shadow .dropdown-menu-axle"  id="ddlPaymentType" title="AXLE" data-live-search="true" data-size="1">
+    <!--   <option value="select">Payment Type</option>-->
+       <option>Sunpass</option>
+       <option>Cash/Toll By Plate</option>
+     </select>
+   </span>
+      <span style="padding-left:20px;padding-right:20px">
+      <select class="selectpicker curtain-menu-shadow .dropdown-menu-axle"  id="ddlAxleCount" title="AXLE" data-live-search="true" data-size="1">
+      <!-- <option value="select">Axles</option>-->
+      <!-- <option>1</option>-->
+       <option>2</option>
+       <option>3</option>
+       <option>4</option>
+       <option>5</option>
+       <option>6</option>
+       <option>7</option>
+       <option>8</option>
+     </select>
+   </span>
+    </div>
+    <div class="bottom-between-dropdowns"></div>
+    <div class="container-fluid">
+      <div class="spanheader-trips">
+        Trip Start
+      </div>
+      <!--  <div class="dropdown" id="srcRegionDrdn">
+        <button  class="btn btn-default dropdown-toggle curtain-menu-shadow button-trips-dropdown" onchange="getFacilities()" onclick="getRegions()" type="button" data-toggle="dropdown">
+          Select Region
+          <span class="caret"></span>
+        </button>
+          <ul id="srcRegionList" class="dropdown-menu button-dropdown-menu-trips">
+            <li><a href="#">TAMPA BAY</a></li>
+            <li><a href="#">CENTRAL EAST COAST</a></li>
+            <li><a href="#">SOUTH FLORIDA</a></li>
+            <li><a href="#">ORLANDO AREA</a></li>
+            <li><a href="#">LAKELAND</a></li>
+            <li><a href="#">FLORIDA PANHANDLE</a></li>
+          </ul>
+        </div>-->
+      <select class="selectpicker curtain-menu-shadow button-trips-dropdown" id="srcRegionDrdn" title="SELECT REGION" data-live-search="true" data-size="1">
+          <option value="select">SELECT REGION</option>
+          <option>TAMPA BAY</option>
+          <option>CENTRAL EAST COAST</option>
+          <option>SOUTH FLORIDA</option>
+          <option>ORLANDO AREA</option>
+          <option>LAKELAND</option>
+          <option>FLORIDA PANHANDLE</option>
+        </select>
+      <div class="bottom-between-dropdowns"></div>
+      <select class="selectpicker curtain-menu-shadow button-trips-dropdown" id="srcFacilityDrdn" title="SELECT FACILITY" data-live-search="true" data-size="1">
+          <option>SELECT FACILITY</option>
+      </select>
+      <div class="bottom-between-dropdowns"></div>
+      <select class="selectpicker curtain-menu-shadow button-trips-dropdown" id="srcExitDrdn" title="SELECT EXIT" data-live-search="true" data-size="1">
+          <option>SELECT EXIT</option>
+     </select>
+      <div class="spanheader-trips">
+        Trip End
+      </div>
+      <select class="selectpicker curtain-menu-shadow button-trips-dropdown" id="desRegionDrdn" title="SELECT REGION" data-live-search="true" data-size="1">
+          <option value="select">SELECT REGION</option>
+        <!--  <option>TAMPA BAY</option>
+          <option>CENTRAL EAST COAST</option>
+          <option>SOUTH FLORIDA</option>
+          <option>ORLANDO AREA</option>
+          <option>LAKELAND</option>
+          <option>FLORIDA PANHANDLE</option>-->
+        </select>
+      <div class="bottom-between-dropdowns"></div>
+      <select class="selectpicker curtain-menu-shadow button-trips-dropdown" id="desFacilityDrdn" title="SELECT FACILITY" data-live-search="true" data-size="1">
+          <option>SELECT FACILITY</option>
+        </select>
+      <div class="bottom-between-dropdowns"></div>
+      <select class="selectpicker curtain-menu-shadow button-trips-dropdown" id="desExitDrdn" title="SELECT EXIT" data-live-search="true" data-size="1">
+          <option>SELECT EXIT</option>
+        </select>
+      <div class="bottom-between-dropdowns"></div>
+      <div class="bottom"></div>
+      <div class="containter-fluid">
+        <span>
+                   <span class="spanpadding printer-span-padding ">
+                       <img src="img/SUNPASS_button.png">
+                     </span>
+        <span style="color:green;text-align:center;font-size: 25px" class="label .axlepayment" id="lblTollValue"> $
+                      </span>
+        </span>
+      </div>
+      <div class="bottom-between-dropdowns" style="padding-bottom:0px; padding-top:3px;"></div>
 
-    var marker = new google.maps.Marker({
-      position: orlando,
-      map: map
+    </div>
+  </div>
+
+  <div class="floating-panel-two">
+    <div id="floating-panel-Header">
+      <span>
+          <img src="img/Recent-trips.png">
+        <!--  <label>Trip Calculator</span> -->
+      <span> Recent Trips </span>
+      </span>
+    </div>
+    <div class="container-fluid">
+      <div class="col-md-16">
+        <div class="img-thumbnail">
+          <div style="position:relative;">
+            <!--  <img src="http://www.patient-experience.org/Images/Stock-Art/For-Patients.aspx" class="img-responsive">-->
+            <!-- Control the Parkway with -->
+            <button id="btnRecentTrip0"class="btn btn-block" style="display: inline-block; position: absolute; top: 0; left: 0; width: 100%; height: 20%; opacity: 0.2; background-color:green; color:#fff;">submit</button>
+            <span style="text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip1Start"> Start :
+            </span>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip1StartValue"> Start Route
+            </span>
+          </div>
+          <div>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip1End"> End :
+            </span>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip1EndValue"> End Route
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="col-md-16">
+        <div class="img-thumbnail">
+          <div style="position:relative;">
+            <button id="btnRecentTrip1" class="btn btn-block" style="display: inline-block; position: absolute; top: 0; left: 0; width: 100%; height: 20%; opacity: 0.2; background-color:red; color:#fff;">submit</button>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip2Start"> Start :
+            </span>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip2StartValue"> Start Route
+            </span>
+          </div>
+          <div>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip2SEnd"> End :
+            </span>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip2EndValue"> End Route
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="col-md-16">
+        <div class="img-thumbnail">
+          <div style="position:relative;">
+            <button id="btnRecentTrip2" class="btn btn-block" style="display: inline-block; position: absolute; top: 0; left: 0; width: 100%; height: 20%; opacity: 0.2; background-color:blue; color:#fff;">submit</button>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip3Start"> Start :
+            </span>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip3StartValue"> Start Route
+            </span>
+          </div>
+          <div>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip3End"> End :
+            </span>
+            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip3EndValue"> End Route
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="legend">
+    <div id="legend-Header">
+      <span>
+          <img src="img/NavigationStar_icon.png">
+        <!--  <label>Trip Calculator</span> -->
+      <span>Map Legend </span>
+      </span>
+      <!--  <span >-->
+      <div id="container-fluid">
+      <table id = "legend-grid">
+         <tr>
+           <td>
+             <span style="display:inline-block;vertical-align:top;text-align:left;color:black;font-size:11px;" class="label"> Interchange
+             </span>
+        </td>
+        <td>
+          <span style="float:right"> <img src="img/Interchange.png">
+              </span>
+        </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="color:black;text-align:left;font-size: 11px;vertical-align: top" class="label "> Mainline Toll Point
+             </span>
+          </td>
+          <td>
+            <img style="float:right" src="img/Toll-Point.png">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="color:black;text-align:left;font-size: 11px;vertical-align: top" class="label "> Toll Lanes
+             </span>
+          </td>
+          <td>
+            <img style="float:right" src="img/Toll_Lanes_Legend.png">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="color:black;text-align:left;font-size: 11px;vertical-align: top" class="label "> Service Plaza
+             </span>
+          </td>
+          <td>
+            <img style="float:right" src="img/GasPump_icon.png">
+          </td>
+        </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!--<h3> My Google Maps Demo</h3>-->
+  <div id="map"></div>
+  <!--<p>Click on the map to add interchanges </p> -->
+  <script>
+    var baseURL = "http://165.227.188.171:9991/";
+    //var testURL = "http://172.20.10.7:9991/";
+    var devBaseURL = "http://192.168.200.4.:9991/";
+    var getFacilityurl = baseURL.concat("facility");
+    var getRegionsurl = baseURL.concat("regions");
+    var getExitUrl = baseURL.concat("regionalfacilityexits");
+    var getDestinationRegionUrl = baseURL.concat("getDestinationRegions");
+    var getDestinationFacilitiesUrl = baseURL.concat("getDestinationFacility");
+    var getDestinationExitsUrl = baseURL.concat("getDestinationExits");
+    var getQualifiedExitsUrl = baseURL.concat("getQualifiedExits");
+    var getTollRoutesUrl = baseURL.concat("getTollRoutes");
+    var getRouteGeometryUrl = devBaseURL.concat("getTollRouteSectionGeometry");
+    var srcRegionSelected;
+    var srcFacilitySelected;
+    var srcExitSelected;
+    var desRegionSelected;
+    var desFacilitySelected;
+    var axleCount = 2;;
+    var paymentMethod;
+    var paymentId = "sp";
+    var sunPassToll = 0;
+    var ddlArray = [];
+    var queue = new Queue();
+    var axlePath;
+    var recentTripFlag = false;
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // All change trigger events
+    ddlArray.push("srcRegionDrdn");
+    ddlArray.push("srcFacilityDrdn");
+    ddlArray.push("srcExitDrdn");
+    ddlArray.push("desRegionDrdn");
+    ddlArray.push("desFacilityDrdn");
+    ddlArray.push("desExitDrdn");
+
+
+  /*  $("#ddlAxleCount").val(axleCount);
+      jQuery("#ddlAxleCount option").filter(function(){
+               return $.trim($(this).text()) ==  axleCount
+       }).prop('selected', true);
+       $('#ddlAxleCount').selectpicker('refresh');*/
+    //Axle Count Dropdown
+    $('#ddlAxleCount').on('change', function() {
+      axleCount = $(this).find("option:selected").val();
+      loadCalculatedTollForAxles();
+      console.log(axleCount);
     });
-map.addListener('click', function(event){
-  console.log(event.latLng);
-  setUpMarkers(event.latLng);
-});
 
-      setUpMarkers(locations);
+    $('#ddlPaymentType').on('change', function() {
+      paymentMethod = $(this).find("option:selected").val();
+      if (paymentMethod === "Cash/Toll By Plate") {
+        paymentId = "cash";
+      }
+      if (paymentMethod === "Sunpass") {
+        paymentId = "sp";
+      }
+
+      console.log(paymentMethod);
+      console.log(paymentId);
+      loadCalculatedTollForAxles();
+    });
+
+    //Source Region Dropdown
+    $('#srcRegionDrdn').on('change', function() {
+      srcRegionSelected = $(this).find("option:selected").text();
+      console.log(srcRegionSelected);
+    /*  if (srcRegionSelected === "SELECT REGION") {
+        console.log(this.id);
+        resetDropDownChain(0);
+      }*/
+        resetDropDownChain(0);
+      loadFacilitiesForSourceRegion(srcRegionSelected);
+
+    });
+
+    //Source facility DropDown
+    $('#srcFacilityDrdn').on('change', function() {
+      srcFacilitySelected = $(this).find("option:selected").text();
+      console.log(srcFacilitySelected);
+/*      if (srcFacilitySelected === "SELECT FACILITY") {
+        resetDropDownChain(1);
+      }*/
+        resetDropDownChain(1);
+      loadExitsForSourceRegionAndFacility(srcRegionSelected, srcFacilitySelected);
+    });
+
+    //Source Exits DropDown
+    $('#srcExitDrdn').on('change', function() {
+      srcExitSelected = $(this).find("option:selected").text();
+      console.log(srcExitSelected);
+      if (srcExitSelected === "SELECT EXIT") {
+        resetDropDownChain(2);
+      }
+      //  loadDestinationExitsForSourceExit(srcRegionSelected, srcFacilitySelected, srcExitSelected);
+      resetDropDownChain(2);
+      loadDestinationRegionForGivenSource(srcRegionSelected, srcFacilitySelected, srcExitSelected);
+    });
+
+    // Destination Region Dropdown
+    $('#desRegionDrdn').on('change', function() {
+      desRegionSelected = $(this).find("option:selected").text();
+      console.log(desRegionSelected);
+      if (desRegionSelected === "SELECT REGION") {
+        resetDropDownChain(3);
+      }
+        resetDropDownChain(3);
+      loadFacilitiesForDestinationRegion(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected);
+    });
+
+    //Destination facility DropDown
+    $('#desFacilityDrdn').on('change', function() {
+      desFacilitySelected = $(this).find("option:selected").text();
+      console.log(desFacilitySelected);
+      if (desFacilitySelected === "SELECT FACILITY") {
+        resetDropDownChain(4);
+      }
+      resetDropDownChain(4);
+      loadExitsForDestinationRegionAndFacility(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected, desFacilitySelected);
+    });
+
+    //Destination Exits DropDown
+    $('#desExitDrdn').on('change', function() {
+      desExitSelected = $(this).find("option:selected").text();
+      console.log(desExitSelected);
+      if (desExitSelected === "SELECT EXIT") {
+        resetDropDownChain(5);
+      }
+      loadCalculatedTollForAxles();
+      //  console.log(JSON.parse(localStorage.trip1));
+
+    });
+
+    $('#btnRecentTrip0').on('click', function(){
+      console.log("In recent trips");
+      if(localStorage.length>1){
+        var recentTripData = localStorage.getItem("SunpassTrip0");
+          var parsedTripData = JSON.parse(recentTripData);
+          srcRegionSelected = parsedTripData.source.region;
+          srcFacilitySelected = parsedTripData.source.facility;
+          srcExitSelected = parsedTripData.source.exit;
+          desRegionSelected = parsedTripData.destination.region;
+          desFacilitySelected = parsedTripData.destination.facility;
+          desExitSelected = parsedTripData.destination.exit;
+          axleCount = parsedTripData.axlecount;
+          //paymentId = "sp";
+
+
+          if(axleCount){
+              $("#ddlAxleCount").val(axleCount);
+              $("#ddlPaymentType").val("Sunpass");
+          }
+          if(srcRegionSelected){
+          $("#srcRegionDrdn").val(srcRegionSelected);
+          recentTripFlag = true;
+        }
+          loadFacilitiesForSourceRegion(srcRegionSelected);
+          loadExitsForSourceRegionAndFacility(srcRegionSelected, srcFacilitySelected);
+          loadDestinationRegionForGivenSource(srcRegionSelected, srcFacilitySelected, srcExitSelected);
+          loadFacilitiesForDestinationRegion(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected);
+          loadExitsForDestinationRegionAndFacility(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected, desFacilitySelected);
+          loadCalculatedTollForAxles();
+      }
+        console.log("Src: " + srcRegionSelected + ":" + srcFacilitySelected +":"+srcExitSelected);
+        console.log("Des: " + desRegionSelected + ":" + desFacilitySelected +":"+desExitSelected);
+        console.log("Axle: " + axleCount);
+
+    });
+
+    $('#btnRecentTrip1').on('click', function(){
+      console.log("In recent trips 2");
+      if(localStorage.length>2){
+        var recentTripData = localStorage.getItem("SunpassTrip1");
+          var parsedTripData = JSON.parse(recentTripData);
+          srcRegionSelected = parsedTripData.source.region;
+          srcFacilitySelected = parsedTripData.source.facility;
+          srcExitSelected = parsedTripData.source.exit;
+          desRegionSelected = parsedTripData.destination.region;
+          desFacilitySelected = parsedTripData.destination.facility;
+          desExitSelected = parsedTripData.destination.exit;
+          axleCount = parsedTripData.axlecount;
+
+
+          if(axleCount){
+            $("#ddlAxleCount").val(axleCount);
+            $("#ddlPaymentType").val("Sunpass");
+          }
+          if(srcRegionSelected){
+          $("#srcRegionDrdn").val(srcRegionSelected);
+          recentTripFlag = true;
+        }
+          loadFacilitiesForSourceRegion(srcRegionSelected);
+          loadExitsForSourceRegionAndFacility(srcRegionSelected, srcFacilitySelected);
+          loadDestinationRegionForGivenSource(srcRegionSelected, srcFacilitySelected, srcExitSelected);
+          loadFacilitiesForDestinationRegion(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected);
+          loadExitsForDestinationRegionAndFacility(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected, desFacilitySelected);
+          loadCalculatedTollForAxles();
+      //    loadFacilitiesForSourceRegion();
+      }
+        console.log("Src: " + srcRegionSelected + ":" + srcFacilitySelected +":"+srcExitSelected);
+        console.log("Des: " + desRegionSelected + ":" + desFacilitySelected +":"+desExitSelected);
+        console.log("Axle: " + axleCount);
+
+    });
+
+    $('#btnRecentTrip2').on('click', function(){
+      console.log("In recent trips 3");
+      if(localStorage.length>3){
+        var recentTripData = localStorage.getItem("SunpassTrip2");
+          var parsedTripData = JSON.parse(recentTripData);
+          srcRegionSelected = parsedTripData.source.region;
+          srcFacilitySelected = parsedTripData.source.facility;
+          srcExitSelected = parsedTripData.source.exit;
+          desRegionSelected = parsedTripData.destination.region;
+          desFacilitySelected = parsedTripData.destination.facility;
+          desExitSelected = parsedTripData.destination.exit;
+          axleCount = parsedTripData.axlecount;
+          if(axleCount){
+            $("#ddlAxleCount").val(axleCount);
+            $("#ddlPaymentType").val("Sunpass");
+          }
+            //  $("#ddlAxleCount").val(axleCount);
+          /*    jQuery("#ddlAxleCount option").filter(function(){
+                        return $.trim($(this).text()) ==  axleCount
+                }).prop('selected', true);
+                $('#ddlAxleCount').selectpicker('refresh');
+
+
+                jQuery("#ddlPaymentType option").filter(function(){
+                          return $.trim($(this).text()) ==  paymentMethod
+                  }).prop('selected', true);
+                  $('#ddlPaymentType').selectpicker('refresh');*/
+          //    $("#ddlPaymentType").val("Sunpass");
+
+          if(srcRegionSelected){
+          $("#srcRegionDrdn").val(srcRegionSelected);
+          recentTripFlag = true;
+        }
+          loadFacilitiesForSourceRegion(srcRegionSelected);
+          loadExitsForSourceRegionAndFacility(srcRegionSelected, srcFacilitySelected);
+          loadDestinationRegionForGivenSource(srcRegionSelected, srcFacilitySelected, srcExitSelected);
+          loadFacilitiesForDestinationRegion(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected);
+          loadExitsForDestinationRegionAndFacility(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected, desFacilitySelected);
+          loadCalculatedTollForAxles();
+      }
+        console.log("Src: " + srcRegionSelected + ":" + srcFacilitySelected +":"+srcExitSelected);
+        console.log("Des: " + desRegionSelected + ":" + desFacilitySelected +":"+desExitSelected);
+        console.log("Axle: " + axleCount);
+
+    });
+
+    /////////////////Functions to Reset the DropDown Chain/////////////////////////////////////////////////////////////////
+    function resetDropDownChain(ddlChainindex) {
+      var chainElement;
+      for (var arrInd = ddlArray.length - 1; arrInd > ddlChainindex; arrInd--) {
+        chainElement = ddlArray[arrInd];
+        console.log(chainElement);
+        removeOptions(document.getElementById(chainElement));
+      }
     }
-    function setUpMarkers(positions){
-    for(var j = 0; j < positions.length;j++){
-        var mark =  new google.maps.Marker({
-      position: new google.maps.latLng(positions[j][1], positions[j][2]),
-      map : map
+
+    function removeOptions(selectbox) {
+      var i;
+      for (i = selectbox.options.length - 1; i > 0; i--) {
+        selectbox.remove(i);
+      }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // JS functions ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Source  Region DropDown Methods
+    function loadFacilitiesForSourceRegion(regionName) {
+      //document.getElementById('#srcFacilityDrdn').reset();
+      var data = "regionName=".concat(regionName);
+      var facilityData;
+      var newitemnum = 0;
+      var newitemdesc = "SELECT FACILITY";
+      axios.post(getFacilityurl, data)
+        .then(function(response) {
+          // console.log(response);
+          if (response.status == 200) {
+            this.someData = response.data.content;
+            console.log(this.someData);
+            facilityData = JSON.parse(this.someData);
+            //  return this.someData;
+            //  this.setState({ someKey: respose.data.content });
+            removeOptions(document.getElementById("srcFacilityDrdn"));
+            //  $('#srcFacilityDrdn').append('<option value="' + newitemnum + '">' + newitemdesc + '</option>');
+            $(facilityData).each(function(index, element) {
+              var k = 0
+              $('#srcFacilityDrdn').append('<option value="' + k + '">' + element + '</option>');
+              // $('#srcFacilityDrdn').val('').selectpicker('refresh');
+            });
+            console.log(recentTripFlag);
+            if(Boolean(recentTripFlag)){
+          //  $("#srcFacilityDrdn").(srcFacilitySelected);
+          jQuery("#srcFacilityDrdn option").filter(function(){
+                    return $.trim($(this).text()) ==  srcFacilitySelected
+            }).prop('selected', true);
+            $('#srcFacilityDrdn').selectpicker('refresh');
+          }
+          }
+        }.bind(this))
+        .catch(function(error) {
+          console.log(error);
+        });
+      //  var sourcefacilityList = getFacility(regionName, getFacilityurl);
+
+
+      /*  if(typeof sourcefacilityList !== "undefined" && typeof sourcefacilityList !==null ){
+        for (var j = 0; j < sourcefacilityList.length; j++) {
+      //    console.log(sourcefacilityList[j]);
+        }
+
+      }*/
+
+      /*    $('.srcFacilityDrdn').val('default');
+          $('.srcFacilityDrdn').selectpicker('refresh');*/
+
+      /*      $('.srcFacilityDrdn').val('default');
+               $('.srcFacilityDrdn').selectpicker('refresh')*/
+      //    $('#srcFacilityDrdn').val('').selectpicker('refresh');
+      //  $(this.element).selectpicker("refresh");
+    }
+
+
+
+    // Exits pulled for given region and facility method
+    function loadExitsForSourceRegionAndFacility(srcRegionSelected, srcFacilitySelected) {
+
+      /*    var sourceexitList = getExitsForRegionAndFacility(srcRegionSelected, srcFacilitySelected, getExitUrl);
+          console.log("Before loading Source Exits DD");
+          console.log(sourceexitList);
+          for (var j = 0; j < sourceexitList.length; j++) {
+            console.log(sourceexitList[j]);
+          }*/
+      var newitemnum = 0;
+      var newitemdesc = "SELECT EXIT";
+      var data = {
+        "region": srcRegionSelected,
+        "facility": srcFacilitySelected
+      };
+      var sourceexitList;
+      axios.post(getExitUrl, data)
+        .then(function(response) {
+          console.log(response);
+          if (response.status == 200) {
+            this.exitData = response.data.content;
+            sourceexitList = JSON.parse(this.exitData);
+            removeOptions(document.getElementById("srcExitDrdn"));
+            //      $('#srcExitDrdn').append('<option value="' + newitemnum + '">' + newitemdesc + '</option>');
+            $(sourceexitList).each(function(index, element) {
+              var i = 0
+              console.log("Index : " + i++);
+              console.log(element); // data.fixLine, data.tarrifType, data.sms
+              $('#srcExitDrdn').append('<option value="' + i + '">' + element + '</option>');
+            });
+            //console.log(regionData);
+            //  this.setState({ someKey: respose.data.content });
+            if(Boolean(recentTripFlag)){
+              jQuery("#srcExitDrdn option").filter(function(){
+                        return $.trim($(this).text()) ==  srcExitSelected
+                }).prop('selected', true);
+                $('#srcExitDrdn').selectpicker('refresh');
+          }
+          }
+        }.bind(this))
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
+
+    // Qualified Regions pulled for given source
+    function loadDestinationRegionForGivenSource(srcRegionSelected, srcFacilitySelected, srcExitSelected) {
+      var desRegionList;
+      var newitemnum = 0;
+      var newitemdesc = "SELECT REGION";
+      var data = {
+        "region": srcRegionSelected,
+        "facility": srcFacilitySelected,
+        "exit": srcExitSelected
+      };
+
+      axios.post(getDestinationRegionUrl, data)
+        .then(function(response) {
+          console.log(response);
+          if (response.status == 200) {
+            this.desRegionData = response.data.content;
+            //console.log(regionData);
+            //  this.setState({ someKey: respose.data.content });
+            desRegionList = JSON.parse(this.desRegionData);
+            removeOptions(document.getElementById("desRegionDrdn"));
+            //    $('#desRegionDrdn').append('<option value="' + newitemnum + '">' + newitemdesc + '</option>');
+            $(desRegionList).each(function(index, element) {
+              var i = 0
+              console.log("Index : " + i++);
+              console.log(element); // data.fixLine, data.tarrifType, data.sms
+              $('#desRegionDrdn').append('<option value="' + i + '">' + element + '</option>');
+            });
+
+            if(Boolean(recentTripFlag)){
+            //$("#desRegionDrdn").val(desRegionSelected);
+            jQuery("#desRegionDrdn option").filter(function(){
+                      return $.trim($(this).text()) ==  desRegionSelected
+              }).prop('selected', true);
+              $('#desRegionDrdn').selectpicker('refresh');
+          }
+          }
+        }.bind(this))
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
+
+  /*  //Destination Exits pulled for given region and facility method
+    function loadDestinationExitsForSourceExit(srcRegionSelected, srcFacilitySelected, srcExitSelected) {
+      //  var desExitList = getQualifiedExitsForSourceRegionalFacilityExit(srcRegionSelected, srcFacilitySelected, srcExitSelected, getDestinationExitsUrl);
+      var desExitList;
+      var newitemnum = 0;
+      var newitemdesc = "SELECT EXIT";
+      //    var desExitList = getQualifiedExits(srcRegionSelected, srcFacilitySelected, srcExitSelected, getDestinationExitsUrl);
+      var data = {
+        "region": srcRegionSelected,
+        "facility": srcFacilitySelected,
+        "exit": srcExitSelected
+      };
+
+      axios.post(getDestinationExitsUrl, data)
+        .then(function(response) {
+          console.log(response);
+          if (response.status == 200) {
+            this.desExitData = response.data.content;
+            //console.log(regionData);
+            //  this.setState({ someKey: respose.data.content });
+            removeOptions(document.getElementById("desExitDrdn"));
+            //    $('#desExitDrdn').append('<option value="' + newitemnum + '">' + newitemdesc + '</option>');
+            desExitList = JSON.parse(this.desExitData);
+            $(desExitList).each(function(index, element) {
+              var i = 0
+              console.log("Index : " + i++);
+              console.log(element); // data.fixLine, data.tarrifType, data.sms
+              $('#desExitDrdn').append('<option value="' + i + '">' + element + '</option>');
+            });
+            if(Boolean(recentTripFlag)){
+              jQuery("#desExitDrdn option").filter(function(){
+                        return $.trim($(this).text()) ==  desExitSelected
+                }).prop('selected', true);
+                $('#desExitDrdn').selectpicker('refresh');
+          }
+
+          }
+        }.bind(this))
+        .catch(function(error) {
+          console.log(error);
+        });
+
+
+
+      //  $('.selectpicker').val('').selectpicker('refresh');
+    } */
+
+    //Pull regions for give source
+    function getRegions(getRegionsurl) {
+      var regionList = loadRegion(getRegionsurl);
+      console.log(regionList);
+    }
+
+    // Destination Methods
+    function loadFacilitiesForDestinationRegion(srcRegionSelected, srcFacilitySelected, srcExitSelected, regionName) {
+      var desFacilities;
+      var newitemnum = 0;
+      var newitemdesc = "SELECT FACILITY";
+      //    var desExitList = getQualifiedExits(srcRegionSelected, srcFacilitySelected, srcExitSelected, getDestinationExitsUrl);
+      var data = {
+        "region": srcRegionSelected,
+        "facility": srcFacilitySelected,
+        "exit": srcExitSelected,
+        "destinationRegion": regionName
+      };
+      console.log(data);
+      axios.post(getDestinationFacilitiesUrl, data)
+        .then(function(response) {
+          console.log(response);
+          if (response.status == 200) {
+            this.desfacilityData = response.data.content;
+            //console.log(regionData);
+            //  this.setState({ someKey: respose.data.content });
+            desFacilities = JSON.parse(this.desfacilityData);
+            removeOptions(document.getElementById("desFacilityDrdn"));
+            //      $('#desFacilityDrdn').append('<option value="' + newitemnum + '">' + newitemdesc + '</option>');
+            $(desFacilities).each(function(index, element) {
+              var i = 0
+              console.log("Index : " + i++);
+              console.log(element); // data.fixLine, data.tarrifType, data.sms
+              $('#desFacilityDrdn').append('<option value="' + i + '">' + element + '</option>');
+            });
+
+            if(Boolean(recentTripFlag)){
+        jQuery("#desFacilityDrdn option").filter(function(){
+                  return $.trim($(this).text()) ==  desFacilitySelected
+          }).prop('selected', true);
+          $('#desFacilityDrdn').selectpicker('refresh');
+      }
+
+          }
+        }.bind(this))
+        .catch(function(error) {
+          console.log(error);
+        });
+
+    }
+
+    /// Destination exits for End Trip Region and Facility
+    function loadExitsForDestinationRegionAndFacility(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionName, desFacilitySelected) {
+      //  var desExitList = getExitsForRegionAndFacility(desRegionSelected, desFacilitySelected, getExitUrl);
+      var newitemnum = 0;
+      var newitemdesc = "SELECT EXIT";
+      var data = {
+        "region": srcRegionSelected,
+        "facility": srcFacilitySelected,
+        "exit": srcExitSelected,
+        "destinationRegion": desRegionName,
+        "destinationfacility": desFacilitySelected
+      };
+      var desExitList;
+      axios.post(getDestinationExitsUrl, data)
+        .then(function(response) {
+          console.log(response);
+          if (response.status == 200) {
+            this.exitData = response.data.content;
+            desExitList = JSON.parse(this.exitData);
+            removeOptions(document.getElementById("desExitDrdn"));
+            //    $('#desExitDrdn').append('<option value="' + newitemnum + '">' + newitemdesc + '</option>');
+            $(desExitList).each(function(index, element) {
+              var i = 0
+              console.log("Index : " + i++);
+              console.log(element); // data.fixLine, data.tarrifType, data.sms
+              $('#desExitDrdn').append('<option value="' + i + '">' + element + '</option>');
+            });
+
+            if(Boolean(recentTripFlag)){
+              jQuery("#desExitDrdn option").filter(function(){
+                        return $.trim($(this).text()) ==  desExitSelected
+                }).prop('selected', true);
+                $('#desExitDrdn').selectpicker('refresh');
+                  recentTripFlag = false;
+      }
+            //console.log(regionData);
+            //  this.setState({ someKey: respose.data.content });
+          }
+        }.bind(this))
+        .catch(function(error) {
+          console.log(error);
+        });
+
+    }
+
+    // Load TollRoutes between Trip Start to Trip end for given axle
+    function loadCalculatedTollForAxles() {
+
+      /*var tollRoutes = getTollRoutes(srcRegionSelected,
+        srcFacilitySelected,
+        srcExitSelected,
+        desRegionSelected,
+        desFacilitySelected,
+        desExitSelected,
+        axleCount,
+        getTollRoutesUrl);
+      console.log("Getting Toll Routes");
+      console.log(tollRoutes);
+
+      console.log(tollRoutes.results[0].tollAmounts.sp);
+      var spAmount = tollRoutes.results[0].tollAmounts.sp;
+      //  console.log(spAmount);
+      //  getTollValue();
+      if (spAmount !== undefined) {
+        sunPassToll = spAmount;
+        //  document.getElementById('lblTollValue').innerHTML = sunPassToll.concat("$");
+      }
+      document.getElementById('lblTollValue').innerHTML = sunPassToll + " $"; */
+
+      if (axleCount) {
+        if (axleCount !== "Axles") {
+          if (srcRegionSelected) {
+            if (srcFacilitySelected) {
+              if (srcExitSelected) {
+                if (desRegionSelected) {
+                  if (desFacilitySelected) {
+                    if (desExitSelected) {
+                      var data = {
+                        "source": {
+                          "region": srcRegionSelected,
+                          "facility": srcFacilitySelected,
+                          "exit": srcExitSelected
+                        },
+
+                        "destination": {
+                          "region": desRegionSelected,
+                          "facility": desFacilitySelected,
+                          "exit": desExitSelected
+                        },
+
+                        "axlecount": axleCount
+                      };
+                      console.log(data);
+
+                      var tollRate = this;
+                      axios.post(getTollRoutesUrl, data)
+                        .then(function(response) {
+                          console.log(response);
+                          if (response.status == 200) {
+                            this.tollRoutesData = response.data.content;
+                            tollRate = JSON.parse(this.tollRoutesData);
+                            var spAmount = tollRate.results[0].tollAmounts.sp;
+                            var cashAmount = tollRate.results[0].tollAmounts.cash;
+                            if (spAmount !== undefined && paymentId === "sp") {
+                              sunPassToll = spAmount;
+                              //localStorage.setItem("trip1Src",srcExitSelected);
+                              //localStorage.setItem("trip1Des",desExitSelected);
+                              localStorage.setItem("currentTrip", JSON.stringify(data));
+                              console.log(localStorage.length);
+                              updateRecentTrips();
+                              loadRecentTripsFromLocal();
+                            }
+                            if (cashAmount !== undefined && paymentId === "cash") {
+                              sunPassToll = cashAmount;
+                              //= JSON.stringify(data);
+                            }
+                            document.getElementById('lblTollValue').innerHTML = "$ " + sunPassToll;
+                          }
+                        }.bind(this))
+                        .catch(function(error) {
+                          console.log(error);
+                        });
+
+                      //Route Highlighting
+                      var positionGeoList = [];
+                      var tollSectionRouteGeoMetry = this;
+                      ///Passing Sample Data////
+                      axios.post(getRouteGeometryUrl, data)
+                        .then(function(response) {
+                          console.log(response);
+                          if (response.status == 200) {
+                            this.tollSectionGeoData = response.data.content;
+                            tollSectionRouteGeoMetry = JSON.parse(this.tollSectionGeoData);
+                            var tripRoutes = tollSectionRouteGeoMetry.results[0].routes;
+                            if (tripRoutes !== undefined) {
+                              positionGeoList = [];
+                              for (var i = 0; i < tripRoutes.length; i++) {
+                                console.log(tripRoutes.length);
+                                for (var j = 0; j < tripRoutes[i].route_geom.coordinates.length; j++) {
+                                  var lat = tripRoutes[i].route_geom.coordinates[j][1];
+                                  var lng = tripRoutes[i].route_geom.coordinates[j][0];
+                            //      console.log(lat + " : " + lng);
+                                  var positionll = new google.maps.LatLng(lat, lng);
+                              //    console.log(positionll);
+                                  bounds.extend(positionll);
+                                  positionGeoList.push(positionll);
+                                  //  console.log(positionGeoList);
+                                }
+                              }
+                              console.log("in polyfill");
+                              if(axlePath){
+                                console.log("Refresh polyfill")
+                                axlePath.setPath(positionGeoList);
+                              }else{
+                                axlePath = new google.maps.Polyline({
+                                path: positionGeoList,
+                                geodesic: true,
+                                strokeColor: '#009d56',
+                                strokeOpacity: 0.8,
+                                strokeWeight: 4
+                              });
+                              console.log("new polyfillComplete")
+                              axlePath.setMap(map);
+                            }
+                              map.fitBounds(bounds);
+                              map.panToBounds(bounds);
+                            }
+                          }
+                        }.bind(this))
+                        .catch(function(error) {
+                          console.log(error);
+                        });
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      //  $('lblTollValue').text =
+    }
+
+    ///////////////////////Update Recent Trips//////////////////////////////////////
+
+    function updateRecentTrips() {
+
+      //  var firstTrip =  JSON.parse(localStorage.trip1);
+      var activeTrip = localStorage.getItem("currentTrip");
+      var isQempty = queue.isEmpty();
+      var qLength = queue.getLength();
+
+      if (isQempty === true) {
+        console.log(isQempty);
+        queue.enqueue(activeTrip);
+      } else if (qLength < 3) {
+        queue.enqueue(activeTrip);
+      } else if (qLength >= 3) {
+        queue.dequeue();
+        queue.enqueue(activeTrip);
+        //localStorage()
+      }
+      //Persist on local storage(For Offline usage)
+      persistLocalStorage();
+
+      //Pesist on queue (in memory management)
+
+      //Load into the UI components( realtime)
+      //document.getElementById('lblTrip1StartValue').innerHTML = srcTrip;
+      //  document.getElementById('lblTrip1StartValue').innerHTML = desTrip;
+    }
+
+    function persistLocalStorage() {
+      var qLength = queue.getLength();
+      var generalTripId = "SunpassTrip";
+      var queueData;
+      if (qLength > 3) {
+        qLength = 3;
+      }
+      for (i = 0; i < qLength; i++) {
+        var tripId = generalTripId + (2 - i);
+        console.log("tripId: " + tripId);
+        queueData = queue.dequeue();
+        console.log("Data in queue: " + queueData)
+        localStorage.setItem(tripId, queueData);
+        queue.enqueue(queueData);
+      }
+      console.log("Persisted to localStorage with size : " + localStorage.length);
+    }
+
+    function loadRecentTripsFromLocal() {
+      var currentStartElement;
+      var currentEndElement;
+      var i = 0;
+
+      if (localStorage.length > 0) {
+        while (i < 3) {
+          var tripIndexItr = "SunpassTrip" + i;
+          currentStartElement = "'lblTrip" + (i + 1) + "StartValue'";
+          currentEndElement = "'lblTrip" + (i + 1) + "EndValue'";
+          console.log(tripIndexItr);
+          var tripDataItr = localStorage.getItem(tripIndexItr);
+          console.log(tripDataItr);
+          var iteratedTripData = JSON.parse(tripDataItr);
+          if (tripDataItr) {
+            queue.enqueue(tripDataItr);
+            console.log(currentStartElement);
+            console.log(currentEndElement);
+            console.log(iteratedTripData);
+            console.log(iteratedTripData.source.exit);
+            console.log(iteratedTripData.destination.exit);
+            switch (i) {
+              case 0:
+                document.getElementById('lblTrip1StartValue').innerHTML = iteratedTripData.source.exit;
+                document.getElementById('lblTrip1EndValue').innerHTML = iteratedTripData.destination.exit;
+                break;
+              case 1:
+                document.getElementById('lblTrip2StartValue').innerHTML = iteratedTripData.source.exit;
+                document.getElementById('lblTrip2EndValue').innerHTML = iteratedTripData.destination.exit;
+                break;
+              case 2:
+                document.getElementById('lblTrip3StartValue').innerHTML = iteratedTripData.source.exit;
+                document.getElementById('lblTrip3EndValue').innerHTML = iteratedTripData.destination.exit;
+                break;
+            }
+          }
+          i++;
+        }
+      }
+    }
+
+    ///// JUNK PiECES OF CODE
+    /*  if (window.File && window.FileReader && window.FileList && window.Blob) {
+        // Great success! All the File APIs are supported.
+      } else {
+        alert('The File APIs are not fully supported in this browser.');
+      }
+      /*
+             var b1 = document.getElementById("btnTraffic");
+             var b2 = document.getElementById('btnReset');
+
+
+             b2.onclick = function() {
+                //  b2.style.background = "#7ea551";
+                //  b2.style.border= "5";
+             }
+
+             b1.onclick = function() {
+                //  b1.style.background = "#b7a15d";
+             }*/
+    /*  var locations = [
+        ['Title A', 28.41, -81.431, 1],
+        ['Title B', 28.42, -81.431, 2],
+        ['Title C', 28.43, -81.431, 3],
+        ['Title D', 28.44, -81.432, 4]
+      ];
+
+      var locationData;
+
+      var icon = {
+        url: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Florida%27s_Turnpike_shield.png'
+      };*/
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //// IMPORTANT MAP CORE OBJECT//////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
+    function initMap() {
+      var orlando = {
+        lat: 28.46,
+        lng: -81.431
+      };
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: orlando,
+        mapTypeControl: true,
+        ////////// MAP  OR Satellite AND ZOOM AND STREETVIEW AND FULLSCREEN/////
+        mapTypeControlOptions: {
+          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: google.maps.ControlPosition.BOTTOM_CENTER
+        },
+        zoomControl: true,
+        scaleControl: true,
+        streetViewControl: true,
+        fullscreenControl: true,
+        fullscreenControlOptions: {
+          position: google.maps.ControlPosition.LEFT_BOTTOM
+        }
+        //  mapTypeId: 'roadmap'
       });
-      markers.push(mark);
+
+      bounds = new google.maps.LatLngBounds();
+
+      ////////////////////Legend Code begin again///////////////////////////////
+      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+      ////////////////////Legend Code end again ////////////////////////////////
+      /*    var marker = new google.maps.Marker({
+            position: orlando,
+            map: map
+          });
+          //var getLocationsUrl =  "http://192.168.1.141:9991/exchanges
+          //  var getLocationsUrl = baseURL.concat("exchanges");
+          var googleUrl = "http://www.google.com"
+          //var getTollPlazasUrl = "http://192.168.200.16:9991/tollPlazas"
+          //156.75.254.31
+          var getTollPlazasUrl = baseURL.concat("tollPlazas"); */
+      //  var getRegionsurl = baseURL.concat("regions");
+
+
+      /////////////Populating Toll Routes for the given 2 exchanges////////////
+      console.log("Does this code execute ?");
+      /*  setCoordinates(function(data){
+          addPolyLine(map,data);
+        });*/
+
+      region1selected = "ORLANDO AREA";
+      facility1selected = "Florida's Turnpike - Orlando Area";
+      exit1selected = "Orlando (I-4)";
+      region2selected = "ORLANDO AREA";
+      facility2selected = "Florida's Turnpike - Orlando Area";
+      exit2selected = "I-75";
+      axleCount = 2;
+
+
+
+      sampleData = {
+        "source": {
+          "region": region1selected,
+          "facility": facility1selected,
+          "exit": exit1selected
+        },
+
+        "destination": {
+          "region": region2selected,
+          "facility": facility2selected,
+          "exit": exit2selected
+        },
+
+        "axlecount": axleCount
+      };
+
+      //setCoordinates(sampleData,map);
+
+      var positionGeoList = [];
+      console.log("Does this code execute ?")
+      /*     if (axleCount) {
+              if (axleCount !== "Axles") {
+                if (srcRegionSelected) {
+                  if (srcFacilitySelected) {
+                    if (srcExitSelected) {
+                      if (desRegionSelected) {
+                        if (desFacilitySelected) {
+                          if (desExitSelected) {
+                            var data = {
+                              "source": {
+                                "region": region1selected,
+                                "facility": facility1selected,
+                                "exit": exit1selected
+                              },
+
+                              "destination": {
+                                "region": region2selected,
+                                "facility": facility2selected,
+                                "exit": exit2selected
+                              },
+
+                              "axlecount": axleCount
+                            };
+                            console.log(data);*/
+
+      /*                    var tollSectionRouteGeoMetry = this;
+                          ///Passing Sample Data////
+                          axios.post(getRouteGeometryUrl, sampleData)
+                            .then(function(response) {
+                              console.log(response);
+                              if (response.status == 200) {
+                                this.tollSectionGeoData = response.data.content;
+                                tollSectionRouteGeoMetry = JSON.parse(this.tollSectionGeoData);
+                                var tripRoutes = tollSectionRouteGeoMetry.results[0].routes;
+                                if (tripRoutes !== undefined) {
+                                  positionGeoList = [];
+                                  for (var i = 0; i < tripRoutes.length; i++) {
+                                      console.log(tripRoutes.length);
+                                    for (var j = 0; j < tripRoutes[i].route_geom.coordinates.length; j++) {
+                                      var lat = tripRoutes[i].route_geom.coordinates[j][1];
+                                      var lng = tripRoutes[i].route_geom.coordinates[j][0];
+                                        console.log(lat+" : "+lng);
+                                      var positionll = new google.maps.LatLng(lat, lng);
+                                      console.log(positionll);
+                                      positionGeoList.push(positionll);
+                                    //  console.log(positionGeoList);
+                                    }
+                                  }
+                                  console.log("in polyfill");
+                                  var axlePath = new google.maps.Polyline({
+                                    path: positionGeoList,
+                                    geodesic: true,
+                                    strokeColor: '#08FF08',
+                                    strokeOpacity: 1.0,
+                                    strokeWeight: 2
+                                  });
+                                  console.log("polyfillComplete")
+                                  axlePath.setMap(map);
+                                }
+                              }
+                            }.bind(this))
+                            .catch(function(error) {
+                              console.log(error);
+                            });
+                      /*  }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }*/
+
+
     }
+    /*
+
+        function setCoordinates(secData,map){
+          var positionGeoList =[];
+          var tollSectionRouteGeoMetry = this;
+          axios.post(getRouteGeometryUrl, secData)
+            .then(function(response) {
+              console.log(response);
+              if (response.status == 200) {
+                this.tollSectionGeoData = response.data.content;
+                tollSectionRouteGeoMetry = JSON.parse(this.tollSectionGeoData);
+                var tripRoutes = tollSectionRouteGeoMetry.results[0].routes;
+
+                if (tripRoutes !== undefined) {
+                  console.log(tripRoutes.length);
+                  for (var i = 0; i < tripRoutes.length; i++) {
+                    //positionGeoList =[];
+                    for (var j = 0; j < tripRoutes[i].route_geom.coordinates.length; j++) {
+                      var lat = tripRoutes[i].route_geom.coordinates[1];
+                      var lng = tripRoutes[i].route_geom.coordinates[0];
+                      console.log(lat+" : "+lng);
+                      var positionll = new google.maps.LatLng(lat, lng);
+                      console.log(positionll);
+                      positionGeoList.push(positionll);
+                    //  console.log(positionGeoList);
+                    }
+                  }
+                  addPolyLine(map,positionGeoList);
+                }
+
+
+              }
+            }.bind(this))
+            .catch(function(error) {
+              console.log(error);
+            });
+        }
+
+        function addPolyLine(map,tollRoadSectionGeos){
+          console.log("in polyfill");
+          var axlePath = new google.maps.Polyline({
+            path: tollRoadSectionGeos,
+            geodesic: true,
+            strokeColor: '#00FF00',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+          });
+          console.log("polyfillComplete");
+
+          axlePath.setMap(map);
+        }*/
+
+    function goGetRegions(locationData) {
+      //console.log(locationData);
+      for (var key in locationData) {
+        console.log("for Key:" + key);
+        for (var j = 0; j < locationData[key].length; j++) {
+          console.log(locationData[key][j]);
+          console.log(locationData[key][j][0]);
+          console.log(locationData[key][j][1]);
+          var plazas = new google.maps.LatLng(locationData[key][j][0], locationData[key][j][1]);
+          //  var plazas = locationData[key][j][1];
+          addMarker(plazas);
+        }
+      }
+
     }
 
-    function clearMarkers(){
-      setMapOnAll(null);
+    function addLatLongs(locationData) {
+      console.log(locationData.length);
+      for (var i = 0; i < locationData.length; i++) {
+        var exchanges = new google.maps.LatLng(locationData[i][1], locationData[i][0]);
+        //console.log(locationData[i][0]);
+        //console.log(locationData[i][1])
+        addMarker(exchanges);
+      }
     }
 
-    function showMarkers(map){
-      for(var i=0;i< markers.length;i++){
-      markers[i].setMap(map);
-     }
+    function ActualMarker() {
+      console.log(this.responseText);
     }
 
-  /*  var markers = [
-      ['Title A', 3.180967,101.715546, 1],
-         ['Title B', 3.200848,101.616669, 2],
-         ['Title C', 3.147372,101.597443, 3],
-         ['Title D', 3.19125,101.710052, 4]
-    ];*/
+    function processLocations(fac) {
+      for (var i = 0; i < fac.results.schemaData.routeSections.length; i++) {
+        for (var j = 0; j < fac.results.schemaData.routeSections[i].coordinates.length; j++)
+          var coords = fac.results.schemaData.routeSections[i].coordinates[j];
+        var latlng = new google.maps.LatLng(coords[1], coords[0]);
+        addMarker(latlng);
+      }
+    }
+    //  fillColor: '#B3B337'
+    function addMarker(location) {
+      marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 4,
+          fillOpacity: 1,
+          strokeOpacity: .8,
+          strokeWeight: 1,
+          fillColor: '#f4414a'
+        },
+      });
+    }
 
-var locations = [
-  ['Title A', 3.180967,101.715546, 1],
-     ['Title B', 3.200848,101.616669, 2],
-     ['Title C', 3.147372,101.597443, 3],
-     ['Title D', 3.19125,101.710052, 4]
-];
 
-var marker2, i;
 
-for(i =0 ; i < locations.length;i++){
-  marker2 = new google.maps.Marker({
-    position: new google.maps.latLng(locations[i][1], locations[i][2]),
-    map: map
-  });
-}
+    function TestMarker() {
+      for (var i = 0; i < locations.length; i++) {
+        var centralpark = new google.maps.LatLng(locations[i][1], locations[i][2]);
+        addMarker(centralpark);
+      }
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDpKvus3VMT0RQuDbJlWXZiZE2k4lQlrI&callback=initMap" async defer></script>
+  <!--  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDpKvus3VMT0RQuDbJlWXZiZE2k4lQlrI&callback=initMap"-->
+  <!--  async defer></script>-->
+</body>
 
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDpKvus3VMT0RQuDbJlWXZiZE2k4lQlrI&callback=initMap"
-    async defer></script>
-  </body>
 </html>
