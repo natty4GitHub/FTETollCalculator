@@ -68,7 +68,7 @@
       <span style="">
           <img src="img/Calculator_Icon.png">
         <!--  <label>Trip Calculator</span> -->
-      <span style="padding-left:3px;font-size:110%;"> Trip Calculator </span>
+      <span style="padding-left:3px;font-size:18px;"> Trip Calculator </span>
       </span>
     </div>
     <div class="bottom-between-dropdowns"></div>
@@ -107,7 +107,7 @@
    </span>
     </div>
     <div class="bottom-between-dropdowns"></div>
-    <div class="container-fluid">
+    <div class="container-fluid" id="tripPlanner">
       <div class="spanheader-trips">
         Trip Start
       </div>
@@ -142,7 +142,7 @@
       <select class="selectpicker curtain-menu-shadow button-trips-dropdown" id="srcExitDrdn" title="SELECT EXIT" data-live-search="true" data-size="1">
           <option>SELECT EXIT</option>
      </select>
-      <div class="spanheader-trips">
+      <div class="spanheader-trips" id="lblDestinationTripEnd">
         Trip End
       </div>
       <select class="selectpicker curtain-menu-shadow button-trips-dropdown" id="desRegionDrdn" title="SELECT REGION" data-live-search="true" data-size="1">
@@ -309,10 +309,12 @@
   <script>
     var baseURL = "http://165.227.188.171:9991/";
     //var testURL = "http://172.20.10.7:9991/";
-    var devBaseURL = "http://192.168.200.4.:9991/";
+    var devBaseURL = "http://192.168.1.141.:9991/";
+  //  var devBaseURL = "http://172.20.10.7.:9991/";
     var getFacilityurl = baseURL.concat("facility");
     var getRegionsurl = baseURL.concat("regions");
-    var getExitUrl = baseURL.concat("regionalfacilityexits");
+    //    var getExitUrl = baseURL.concat("regionalfacilityexits");
+    var getExitUrl = devBaseURL.concat("regionalfacilityexits");
     var getDestinationRegionUrl = baseURL.concat("getDestinationRegions");
     var getDestinationFacilitiesUrl = baseURL.concat("getDestinationFacility");
     var getDestinationExitsUrl = baseURL.concat("getDestinationExits");
@@ -321,14 +323,15 @@
     var getRouteGeometryUrl = devBaseURL.concat("getTollRouteSectionGeometry");
     var getAllInterchangesUrl = devBaseURL.concat("getAllRouteAttributes");
     var getAllRouteLineUrl = baseURL.concat("exchanges");
-    var getTollPlazasUrl = baseURL.concat("tollPlazas");
+    var getTollPlazasUrl = devBaseURL.concat("tollPlazas");
+    var getSinglePointStatusUrl = devBaseURL.concat("checkSinglePointOutliers");
     var srcRegionSelected;
     var srcFacilitySelected;
     var srcExitSelected;
     var desRegionSelected;
     var desFacilitySelected;
     var axleCount = 2;;
-    var paymentMethod;
+    var paymentMethod="sunPass";
     var paymentId = "sp";
     var sunPassToll = 0;
     var ddlArray = [];
@@ -336,7 +339,8 @@
     var axlePath;
     var recentTripFlag = false;
     var mapMarkers = [];
-    var otherActiveWindow ;
+    var otherActiveWindow;
+    var isSinglePoint = false;
 
 
 
@@ -568,6 +572,13 @@
 
     /////////////////Functions to Reset the DropDown Chain/////////////////////////////////////////////////////////////////
     function resetDropDownChain(ddlChainindex) {
+      if (Boolean(isSinglePoint)) {
+        $('#lblDestinationTripEnd').show();
+        $('#desRegionDrdn').show();
+        $('#desFacilityDrdn').show();
+        $('#desExitDrdn').show();
+        //  $('.selectpicker').selectpicker('refresh');
+      }
       var chainElement;
       for (var arrInd = ddlArray.length - 1; arrInd > ddlChainindex; arrInd--) {
         chainElement = ddlArray[arrInd];
@@ -696,8 +707,104 @@
         "facility": srcFacilitySelected,
         "exit": srcExitSelected
       };
+      isSinglePoint = false;
+      var singlePointCash = 0;
+      var singlePointSunPass = 0;
 
-      axios.post(getDestinationRegionUrl, data)
+
+      axios.post(getSinglePointStatusUrl, data)
+        .then(function(response) {
+          console.log(response);
+          if (response.status == 200) {
+            var destinationControlsStatus = response.data.content;
+            //console.log(regionData);
+            //  this.setState({ someKey: respose.data.content });
+            isSinglePoint = JSON.parse(destinationControlsStatus);
+            console.log(isSinglePoint);
+
+            if (Boolean(isSinglePoint)) {
+              //Calculate tolls and disable destination controls
+              console.log("Calculate tolls and disable destination controls");
+              $('#desRegionDrdn').hide();
+              $('#desFacilityDrdn').hide();
+              $('#desExitDrdn').hide();
+              $('#lblDestinationTripEnd').hide();
+
+              //loadSinglePointTollsperAxle(data, axleCount, isSinglePoint);
+              console.log("Check Single Point Flag");
+              bounds = new google.maps.LatLngBounds();
+              axios.get(getTollPlazasUrl)
+                .then(function(response) {
+                  if (response.status == 200) {
+                    tollPlazaData = response.data;
+                    //goPopulateTollPoints(tollPlazasData.tollplazas);
+                    tollPointsData = tollPlazaData.tollplazas;
+                    for (var arrPointer in tollPointsData) {
+                      /*    console.log(tollPointsData[arrPointer]);
+                          console.log(data.region.trim())
+                          console.log(data.facility.trim())
+                          console.log(data.exit.trim())
+                          console.log(tollPointsData[arrPointer].tollPlazaRegion.trim());
+                          console.log(tollPointsData[arrPointer].tollPlazaFacility.trim());
+                          console.log(tollPointsData[arrPointer].tollPlazaName.trim());*/
+                      if (tollPointsData[arrPointer].tollPlazaRegion.trim().toUpperCase() === data.region.trim().toUpperCase()) {
+                      //    console.log(data.region.trim() + "===" + tollPointsData[arrPointer].tollPlazaRegion.trim());
+                          if(tollPointsData[arrPointer].tollPlazaFacility.trim().toUpperCase() === data.facility.trim().toUpperCase()) {
+                      //      console.log(data.facility.trim() + "===" + tollPointsData[arrPointer].tollPlazaFacility.trim());
+                          //  console.log(data.exit.trim() + "===" + tollPointsData[arrPointer].tollPlazaName.trim());
+                            if(tollPointsData[arrPointer].tollPlazaName.trim().toUpperCase() === data.exit.trim().toUpperCase()) {
+                              /////Check this code later
+                            console.log(data.exit.trim() + "===" + tollPointsData[arrPointer].tollPlazaName.trim());
+                            console.log("Printing in single point loop");
+                            var tollPoints = new google.maps.LatLng(tollPointsData[arrPointer].tollPlazaCoordinates[0],
+                              tollPointsData[arrPointer].tollPlazaCoordinates[1]);
+                            var tollPointName = tollPointsData[arrPointer].tollPlazaName;
+                            var tollValuePerAxle = tollPointsData[arrPointer].tollPerAxlePerMethod;
+                        //    var lat = tollPointsData[arrPointer].tollPerAxlePerMethod[0];
+                          //  var lng = tollPointsData[arrPointer].tollPerAxlePerMethod[1];
+                            //      console.log(lat + " : " + lng);
+                      //      var positionll = new google.maps.LatLng(lat, lng);
+                            //    console.log(positionll);
+                            bounds.extend(tollPoints);
+                            //  positionGeoList.push(positionll);
+                            map.fitBounds(bounds);
+                            map.panToBounds(bounds);
+
+                            for (axleVector in tollValuePerAxle) {
+                              if (tollValuePerAxle[axleVector].axle === axleCount) {
+                                  console.log(paymentMethod);
+                                  console.log(paymentId);
+                              if(paymentMethod === "cash"){
+                                singlePointSunPass = tollValuePerAxle[axleVector].cash;
+                              }else{
+                                  singlePointSunPass = tollValuePerAxle[axleVector].sunPass;
+                                }
+                          //    }
+                              }
+                            }
+                            addMarker(tollPoints, tollPointName);
+                          }
+                        }
+                      }
+                    }
+                    if (singlePointSunPass != 999) {
+                      document.getElementById('lblTollValue').innerHTML = "$ " + singlePointSunPass;
+                    }
+                  }
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+              $('.selectpicker').selectpicker('refresh');
+            }
+          }
+        }.bind(this))
+        .catch(function(error) {
+          console.log(error);
+        });
+      console.log("Destination Exits call");
+      console.log(isSinglePoint);
+     axios.post(getDestinationRegionUrl, data)
         .then(function(response) {
           console.log(response);
           if (response.status == 200) {
@@ -726,6 +833,7 @@
         .catch(function(error) {
           console.log(error);
         });
+
     }
 
     /*  //Destination Exits pulled for given region and facility method
@@ -871,6 +979,58 @@
 
     }
 
+    //Load TollValues for SinglePoint Source regionalfacilityexits
+    function loadSinglePointTollsperAxle(singlePointSrcData, singlepointAxleCount, singlePointFlag) {
+      var singlePointCash = 0;
+      var singlePointSunPass = 0;
+      console.log("Check Single Point Flag: " + singlePointFlag);
+      if (Boolean(singlePointFlag)) {
+        console.log("Check Single Point Flag");
+        axios.get(getTollPlazasUrl)
+          .then(function(response) {
+            if (response.status == 200) {
+              tollPlazasData = response.data;
+              //goPopulateTollPoints(tollPlazasData.tollplazas);
+              for (var arrPointer in tollPointsData) {
+                if ((tollPointsData[arrPointer].tollPlazaRegion === singlePointSrcData.region) &&
+                  (tollPointsData[arrPointer].tollPlazaFacility === singlePointSrcData.facility) &&
+                  (tollPointsData[arrPointer].tollPlazaName === singlePointSrcData.exit)) {
+                  console.log("Printing in single point loop");
+                  var tollPoints = new google.maps.LatLng(tollPointsData[arrPointer].tollPlazaCoordinates[0],
+                    tollPointsData[arrPointer].tollPlazaCoordinates[1]);
+                  var tollPointName = tollPointsData[arrPointer].tollPlazaName;
+                  var tollValuePerAxle = tollPointsData[arrPointer].tollPerAxlePerMethod;
+                  var lat = tollPointsData[arrPointer].tollPerAxlePerMethod[0];
+                  var lng = tollPointsData[arrPointer].tollPerAxlePerMethod[1];
+                  //      console.log(lat + " : " + lng);
+                  var positionll = new google.maps.LatLng(lat, lng);
+                  //    console.log(positionll);
+                  bounds.extend(positionll);
+                  //  positionGeoList.push(positionll);
+                  map.fitBounds(bounds);
+                  map.panToBounds(bounds);
+
+                  for (axleVector in tollValuePerAxle) {
+                    if (tollValuePerAxle[axleVector].axle === singlepointAxleCount) {
+                      singlePointCash = tollValuePerAxle[axleVector].cash;
+                      singlePointSunPass = tollValuePerAxle[axleVector].sunPass;
+                    }
+                  }
+                  addMarker(tollPoints, tollPointName);
+                }
+              }
+              if (singlePointSunPass != 999) {
+                document.getElementById('lblTollValue').innerHTML = "$ " + singlePointSunPass;
+              }
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+
+    }
+
     // Load TollRoutes between Trip Start to Trip end for given axle
     function loadCalculatedTollForAxles() {
 
@@ -952,6 +1112,7 @@
                       //Route Highlighting
                       var positionGeoList = [];
                       var tollSectionRouteGeoMetry = this;
+                      bounds = new google.maps.LatLngBounds();
                       ///Passing Sample Data////
                       axios.post(getRouteGeometryUrl, data)
                         .then(function(response) {
@@ -1168,9 +1329,12 @@
         .then(function(response) {
           if (response.status == 200) {
             // console.log(response.data);
-            tollPlazasData = JSON.parse(response.data.content);
+            //tollPlazasData = JSON.parse(response.data);
+            tollPlazasData = response.data;
+            //  console.log(tollPlazasData.tollplazas.length);
+            //    console.log(tollPlazasData);
             //    console.log(locationData);
-            goGetRegions(tollPlazasData);
+            goPopulateTollPoints(tollPlazasData.tollplazas);
           }
         })
         .catch(function(error) {
@@ -1195,11 +1359,93 @@
       ///////////////////////Marker code ends/////////////////////////////////
 
       /////////////////////////Info Window Code begins/////////////////////////
+    }
 
+    function goPopulateInterchanges(interchangeData) {
+      //console.log(locationData);
+      for (var vector in interchangeData) {
+        //    console.log("for Key:" + key);
+        //  var lat = interchangeData[vector].exitCoordinates[0];
+        //  var lng = interchangeData[vector].exitCoordinates[1];
+        var interchanges = new google.maps.LatLng(interchangeData[vector].exitCoordinates[0], interchangeData[vector].exitCoordinates[1]);
+        var interChangeName = interchangeData[vector].exitName;
+        //  var plazas = locationData[key][j][1];
+        addInterchangesMarker(interchanges, interChangeName);
+      }
+    }
+
+    function goPopulateTollPoints(tollPointsData) {
+
+      for (var arrPointer in tollPointsData) {
+
+        var tollPoints = new google.maps.LatLng(tollPointsData[arrPointer].tollPlazaCoordinates[0],
+          tollPointsData[arrPointer].tollPlazaCoordinates[1]);
+        var tollPointName = tollPointsData[arrPointer].tollPlazaName;
+
+        addMarker(tollPoints, tollPointName);
+      }
 
     }
 
 
+    function addInterchangesMarker(location, interchangeName) {
+      marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 4,
+          fillOpacity: 1,
+          strokeOpacity: .8,
+          strokeWeight: 1,
+          fillColor: '#97FF97'
+        },
+      });
+      addInfoWindow(marker, interchangeName);
+    }
+
+    function addMarker(location, tollPointName) {
+
+
+      marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 4,
+          fillOpacity: 1,
+          strokeOpacity: .8,
+          strokeWeight: 1,
+          fillColor: '#9797FF'
+        },
+      });
+      addInfoWindow(marker, tollPointName);
+      //  mapMarkers.push(marker);
+    }
+
+    function addInfoWindow(marker, message) {
+      var infowindow = new google.maps.InfoWindow({
+        content: message
+      });
+      google.maps.event.addListener(marker, 'click', function() {
+        //  hideAllInfoWindows(map);
+        if (otherActiveWindow != null) {
+          //  hideAllInfoWindows(map, marker);
+          console.log("non active window closed");
+          otherActiveWindow.close();
+        }
+        infowindow.open(map, this);
+
+        otherActiveWindow = infowindow;
+      });
+
+    }
+
+    function hideAllInfoWindows(map, marker) {
+      mapMarkers.forEach(function(marker) {
+        marker.infowindow.close(map, marker);
+      });
+    }
 
     /*
         function setCoordinates(secData,map){
@@ -1252,19 +1498,7 @@
           axlePath.setMap(map);
         }*/
 
-    function goPopulateInterchanges(interchangeData) {
-      //console.log(locationData);
-      for (var vector in interchangeData) {
-        //    console.log("for Key:" + key);
-        //  var lat = interchangeData[vector].exitCoordinates[0];
-        //  var lng = interchangeData[vector].exitCoordinates[1];
-        var interchanges = new google.maps.LatLng(interchangeData[vector].exitCoordinates[0], interchangeData[vector].exitCoordinates[1]);
-        var interChangeName = interchangeData[vector].exitName;
-        //  var plazas = locationData[key][j][1];
-        addInterchangesMarker(interchanges, interChangeName);
-      }
-    }
-
+    /*
     function goGetRegions(locationData) {
       //console.log(locationData);
       for (var key in locationData) {
@@ -1280,66 +1514,7 @@
       }
     }
 
-    function addInterchangesMarker(location, interchangeName) {
-      marker = new google.maps.Marker({
-        position: location,
-        map: map,
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 4,
-          fillOpacity: 1,
-          strokeOpacity: .8,
-          strokeWeight: 1,
-          fillColor: '#97FF97'
-        },
-      });
-      addInfoWindow(marker, interchangeName);
-    }
-
-    function addMarker(location) {
-
-
-      marker = new google.maps.Marker({
-        position: location,
-        map: map,
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 4,
-          fillOpacity: 1,
-          strokeOpacity: .8,
-          strokeWeight: 1,
-          fillColor: '#9797FF'
-        },
-      });
-
-      mapMarkers.push(marker);
-    }
-
-    function addInfoWindow(marker, message) {
-      var infowindow = new google.maps.InfoWindow({
-        content: message
-      });
-      google.maps.event.addListener(marker, 'click', function() {
-      //  hideAllInfoWindows(map);
-      if (otherActiveWindow !=null) {
-      //  hideAllInfoWindows(map, marker);
-        console.log("non active window closed");
-        otherActiveWindow.close();
-      }
-        infowindow.open(map, this);
-
-        otherActiveWindow = infowindow;
-      });
-
-    }
-
-    function hideAllInfoWindows(map, marker) {
-      mapMarkers.forEach(function(marker) {
-        marker.infowindow.close(map, marker);
-      });
-    }
-
-
+    */
     /*  function addLatLongs(locationData) {
         console.log(locationData.length);
         for (var i = 0; i < locationData.length; i++) {
