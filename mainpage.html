@@ -15,6 +15,7 @@
   <link rel="stylesheet" type="text/css" href="css/legends.css">
   <link rel="stylesheet" type="text/css" href="css/recentTrips.css">
   <link rel="stylesheet" type="text/css" href="css/header.css">
+  <link rel="stylesheet" type="text/css" href="css/infoWindow.css">
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="js/loadRegion.js"></script>
@@ -38,14 +39,18 @@
   </style>
 </head>
 
-<body onload="loadRecentTripsFromLocal ()">
-  <div id="container-fluid" style="position:fixed;top:1px;left:1px;z-index:4;background:#fff">
+<body onload="loadRecentTripsFromLocal()">
+  <div id="container-fluid" style="position:fixed;top:1px;
+  left:1px;z-index:4;
+  background:#fff;
+  width:144px;height:90px;
+  padding-left:4px;padding-right:10px;padding-top:4px">
     <span>
       <img src="img/FDOT_TC_F.png">
     </span>
   </div>
   <div class="header">
-    <nav class="navbar navbar-default" style="position:fixed;z-index:4;background:#009d56;top:10px;left:137px;">
+    <nav class="navbar navbar-default" style="position:fixed;z-index:4;background:#009d56;top:15px;left:146px;">
       <div class="container-fluid">
         <ul class="nav navbar-nav">
           <li><a href="#" style="color:white"><img src="img/PaymentMethods_icon.png"> Payment Options</a></li>
@@ -108,7 +113,7 @@
     </div>
     <div class="bottom-between-dropdowns"></div>
     <div class="container-fluid" id="tripPlanner">
-      <div class="spanheader-trips">
+      <div class="spanheader-trips" id="lblSourceTripStart">
         Trip Start
       </div>
       <!--  <div class="dropdown" id="srcRegionDrdn">
@@ -174,10 +179,12 @@
         </span>
       </div>
       <div class="bottom-between-dropdowns" style="padding-bottom:0px; padding-top:3px;"></div>
-
+      <div class="bottom"></div>
+      <span style="color:black;text-align:center;font-size: 12px" class="label" id="lblTraffic">Traffic
+      <button class="button" id="btnTraffic"><img src="img/Traffic Cars.png"></>
+      </span>
     </div>
   </div>
-
   <div class="floating-panel-two">
     <div id="floating-panel-Header">
       <span>
@@ -186,63 +193,68 @@
       <span> Recent Trips </span>
       </span>
     </div>
+    <div class="bottom-between-dropdowns"></div>
     <div class="container-fluid">
-      <div class="col-md-16">
-        <div class="img-thumbnail">
-          <div style="position:relative;">
-            <!--  <img src="http://www.patient-experience.org/Images/Stock-Art/For-Patients.aspx" class="img-responsive">-->
-            <!-- Control the Parkway with -->
-            <button id="btnRecentTrip0" class="btn btn-block" style="display: inline-block; position: absolute; top: 0; left: 0; width: 100%; height: 20%; opacity: 0.2; background-color:green; color:#fff;">submit</button>
-            <span style="text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip1Start"> Start :
+      <div style="position:relative;">
+        <!--  <img src="http://www.patient-experience.org/Images/Stock-Art/For-Patients.aspx" class="img-responsive">-->
+        <!-- Control the Parkway with -->
+        <button id="btnRecentTrip0" class="btn btn-block" style="display: inline-block; position: absolute;
+             top: 0; left: 0;
+             width: 100%; height: 20%;
+             opacity: 0.3;
+             background-color:#7de889; color:#fff;">
+             </button>
+        <span style="color:#000;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip1Start"> <b>Start :</b>
+               </span>
+        <span style="color:#000;text-align:left;font-size: 11px;width:150px" class="label recentTripLabel" id="lblTrip1StartValue"> Start Route
+               </span>
+      </div>
+      <div>
+        <span style="color:#000;text-align:left;font-size: 11px;" class="label recentTripLabel" id="lblTrip1End"> <b> End : </b>
             </span>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip1StartValue"> Start Route
+        <span style="color:#000;text-align:left;font-size: 11px;width:150px" class="label recentTripLabel" id="lblTrip1EndValue"> End Route
             </span>
-          </div>
-          <div>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip1End"> End :
-            </span>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip1EndValue"> End Route
-            </span>
-          </div>
-        </div>
       </div>
     </div>
+    <div class="bottom"></div>
     <div class="container-fluid">
-      <div class="col-md-16">
-        <div class="img-thumbnail">
-          <div style="position:relative;">
-            <button id="btnRecentTrip1" class="btn btn-block" style="display: inline-block; position: absolute; top: 0; left: 0; width: 100%; height: 20%; opacity: 0.2; background-color:red; color:#fff;">submit</button>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip2Start"> Start :
+      <div style="position:relative;">
+        <button id="btnRecentTrip1" class="btn btn-block" style="display: inline-block; position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 20%;
+            opacity: 0.3;
+            background-color:#12a523; color:#fff;"></button>
+        <span style="color:#000;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip2Start"> </b> Start :</b>
             </span>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip2StartValue"> Start Route
+        <span style="color:#000;text-align:left;font-size: 11px;width:150px" class="label recentTripLabel" id="lblTrip2StartValue"> Start Route
             </span>
-          </div>
-          <div>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip2SEnd"> End :
+      </div>
+      <div>
+        <span style="color:#000;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip2SEnd"> End :
             </span>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip2EndValue"> End Route
+        <span style="color:#000;text-align:left;font-size: 11px;width:150px" class="label recentTripLabel" id="lblTrip2EndValue"> End Route
             </span>
-          </div>
-        </div>
       </div>
     </div>
+    <div class="bottom"></div>
     <div class="container-fluid">
-      <div class="col-md-16">
-        <div class="img-thumbnail">
-          <div style="position:relative;">
-            <button id="btnRecentTrip2" class="btn btn-block" style="display: inline-block; position: absolute; top: 0; left: 0; width: 100%; height: 20%; opacity: 0.2; background-color:blue; color:#fff;">submit</button>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip3Start"> Start :
+      <div style="position:relative;">
+        <button id="btnRecentTrip2" class="btn btn-block" style="display: inline-block;
+             position: absolute;
+             top: 0; left: 0;
+             width: 100%; height: 20%;
+             opacity: 0.3;
+             background-color:#296d31; color:#fff;"></button>
+        <span style="color:#000;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip3Start"> Start :
             </span>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip3StartValue"> Start Route
+        <span style="color:#000;text-align:left;font-size: 11px;width:150px" class="label recentTripLabel" id="lblTrip3StartValue"> Start Route
             </span>
-          </div>
-          <div>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip3End"> End :
+      </div>
+      <div>
+        <span style="color:#000;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip3End"> End :
             </span>
-            <span style="color:green;text-align:left;font-size: 11px" class="label recentTripLabel" id="lblTrip3EndValue"> End Route
+        <span style="color:#000;text-align:left;font-size: 11px;width:150px" class="label recentTripLabel" id="lblTrip3EndValue"> End Route
             </span>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -309,29 +321,31 @@
   <script>
     var baseURL = "http://165.227.188.171:9991/";
     //var testURL = "http://172.20.10.7:9991/";
-    var devBaseURL = "http://192.168.1.141.:9991/";
-  //  var devBaseURL = "http://172.20.10.7.:9991/";
+    var devBaseURL = "http://192.168.200.41:9991/";
+    //  var devBaseURL = "http://172.20.10.7.:9991/";
     var getFacilityurl = baseURL.concat("facility");
     var getRegionsurl = baseURL.concat("regions");
     //    var getExitUrl = baseURL.concat("regionalfacilityexits");
     var getExitUrl = devBaseURL.concat("regionalfacilityexits");
     var getDestinationRegionUrl = baseURL.concat("getDestinationRegions");
     var getDestinationFacilitiesUrl = baseURL.concat("getDestinationFacility");
-    var getDestinationExitsUrl = baseURL.concat("getDestinationExits");
-    var getQualifiedExitsUrl = baseURL.concat("getQualifiedExits");
+    var getDestinationExitsUrl = devBaseURL.concat("getDestinationExits");
+    var getQualifiedExitsUrl = devBaseURL.concat("getQualifiedExits");
     var getTollRoutesUrl = baseURL.concat("getTollRoutes");
-    var getRouteGeometryUrl = devBaseURL.concat("getTollRouteSectionGeometry");
+    var getRouteGeometryUrl = baseURL.concat("getTollRouteSectionGeometry");
+    //  var getAllInterchangesUrl = baseURL.concat("getAllRouteAttributes");
     var getAllInterchangesUrl = devBaseURL.concat("getAllRouteAttributes");
-    var getAllRouteLineUrl = baseURL.concat("exchanges");
-    var getTollPlazasUrl = devBaseURL.concat("tollPlazas");
-    var getSinglePointStatusUrl = devBaseURL.concat("checkSinglePointOutliers");
+    //var getAllRouteLineUrl = baseURL.concat("exchanges");
+    var getTollPlazasUrl = baseURL.concat("tollPlazas");
+    var getSinglePointStatusUrl = baseURL.concat("checkSinglePointOutliers");
+    var getMapDestinationExitsUrl= devBaseURL.concat("getQualifiedDestinationExitsAttributes");
     var srcRegionSelected;
     var srcFacilitySelected;
     var srcExitSelected;
     var desRegionSelected;
     var desFacilitySelected;
-    var axleCount = 2;;
-    var paymentMethod="sunPass";
+    var axleCount = 2;
+    var paymentMethod = "sunPass";
     var paymentId = "sp";
     var sunPassToll = 0;
     var ddlArray = [];
@@ -339,8 +353,16 @@
     var axlePath;
     var recentTripFlag = false;
     var mapMarkers = [];
+    var exitMapMarkers = [];
     var otherActiveWindow;
     var isSinglePoint = false;
+    var trafficLayer;
+    var GUIRegionSrc;
+    var GUIFacilitySrc;
+    var GUIExitSrc;
+    var GUIRegionDes;
+    var GUIFacilityDes;
+    var GUIExitDes;
 
 
 
@@ -449,6 +471,36 @@
       }
       loadCalculatedTollForAxles();
       //  console.log(JSON.parse(localStorage.trip1));
+
+    });
+
+
+    $('#btnTraffic').on('click', function() {
+
+      //toggleTraffic(trafficLayer);
+      //    console.log(this);
+      console.log(this.trafficLayer);
+      if (trafficLayer.getMap() == null) {
+        trafficLayer.setMap(map);
+      } else {
+        trafficLayer.setMap(null);
+      }
+    });
+
+    function toggleTraffic(trafficLayer) {
+      console.log(trafficLayer.getMap());
+      console.log(this);
+      if (trafficLayer.getMap() == null) {
+        trafficLayer.setMap(map);
+      } else {
+        trafficLayer.setMap(null);
+      }
+    }
+
+
+    $('btnSelectStart').on('click', function() {
+
+      console.log("You just started a trip");
 
     });
 
@@ -748,22 +800,22 @@
                           console.log(tollPointsData[arrPointer].tollPlazaFacility.trim());
                           console.log(tollPointsData[arrPointer].tollPlazaName.trim());*/
                       if (tollPointsData[arrPointer].tollPlazaRegion.trim().toUpperCase() === data.region.trim().toUpperCase()) {
-                      //    console.log(data.region.trim() + "===" + tollPointsData[arrPointer].tollPlazaRegion.trim());
-                          if(tollPointsData[arrPointer].tollPlazaFacility.trim().toUpperCase() === data.facility.trim().toUpperCase()) {
-                      //      console.log(data.facility.trim() + "===" + tollPointsData[arrPointer].tollPlazaFacility.trim());
+                        //    console.log(data.region.trim() + "===" + tollPointsData[arrPointer].tollPlazaRegion.trim());
+                        if (tollPointsData[arrPointer].tollPlazaFacility.trim().toUpperCase() === data.facility.trim().toUpperCase()) {
+                          //      console.log(data.facility.trim() + "===" + tollPointsData[arrPointer].tollPlazaFacility.trim());
                           //  console.log(data.exit.trim() + "===" + tollPointsData[arrPointer].tollPlazaName.trim());
-                            if(tollPointsData[arrPointer].tollPlazaName.trim().toUpperCase() === data.exit.trim().toUpperCase()) {
-                              /////Check this code later
+                          if (tollPointsData[arrPointer].tollPlazaName.trim().toUpperCase() === data.exit.trim().toUpperCase()) {
+                            /////Check this code later
                             console.log(data.exit.trim() + "===" + tollPointsData[arrPointer].tollPlazaName.trim());
                             console.log("Printing in single point loop");
                             var tollPoints = new google.maps.LatLng(tollPointsData[arrPointer].tollPlazaCoordinates[0],
                               tollPointsData[arrPointer].tollPlazaCoordinates[1]);
                             var tollPointName = tollPointsData[arrPointer].tollPlazaName;
                             var tollValuePerAxle = tollPointsData[arrPointer].tollPerAxlePerMethod;
-                        //    var lat = tollPointsData[arrPointer].tollPerAxlePerMethod[0];
-                          //  var lng = tollPointsData[arrPointer].tollPerAxlePerMethod[1];
+                            //    var lat = tollPointsData[arrPointer].tollPerAxlePerMethod[0];
+                            //  var lng = tollPointsData[arrPointer].tollPerAxlePerMethod[1];
                             //      console.log(lat + " : " + lng);
-                      //      var positionll = new google.maps.LatLng(lat, lng);
+                            //      var positionll = new google.maps.LatLng(lat, lng);
                             //    console.log(positionll);
                             bounds.extend(tollPoints);
                             //  positionGeoList.push(positionll);
@@ -772,14 +824,14 @@
 
                             for (axleVector in tollValuePerAxle) {
                               if (tollValuePerAxle[axleVector].axle === axleCount) {
-                                  console.log(paymentMethod);
-                                  console.log(paymentId);
-                              if(paymentMethod === "cash"){
-                                singlePointSunPass = tollValuePerAxle[axleVector].cash;
-                              }else{
+                                console.log(paymentMethod);
+                                console.log(paymentId);
+                                if (paymentMethod === "cash") {
+                                  singlePointSunPass = tollValuePerAxle[axleVector].cash;
+                                } else {
                                   singlePointSunPass = tollValuePerAxle[axleVector].sunPass;
                                 }
-                          //    }
+                                //    }
                               }
                             }
                             addMarker(tollPoints, tollPointName);
@@ -804,7 +856,7 @@
         });
       console.log("Destination Exits call");
       console.log(isSinglePoint);
-     axios.post(getDestinationRegionUrl, data)
+      axios.post(getDestinationRegionUrl, data)
         .then(function(response) {
           console.log(response);
           if (response.status == 200) {
@@ -1257,39 +1309,6 @@
         }
       }
     }
-
-    ///// JUNK PiECES OF CODE
-    /*  if (window.File && window.FileReader && window.FileList && window.Blob) {
-        // Great success! All the File APIs are supported.
-      } else {
-        alert('The File APIs are not fully supported in this browser.');
-      }
-      /*
-             var b1 = document.getElementById("btnTraffic");
-             var b2 = document.getElementById('btnReset');
-
-
-             b2.onclick = function() {
-                //  b2.style.background = "#7ea551";
-                //  b2.style.border= "5";
-             }
-
-             b1.onclick = function() {
-                //  b1.style.background = "#b7a15d";
-             }*/
-    /*  var locations = [
-        ['Title A', 28.41, -81.431, 1],
-        ['Title B', 28.42, -81.431, 2],
-        ['Title C', 28.43, -81.431, 3],
-        ['Title D', 28.44, -81.432, 4]
-      ];
-
-      var locationData;
-
-      var icon = {
-        url: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Florida%27s_Turnpike_shield.png'
-      };*/
-
     ///////////////////////////////////////////////////////////////////////////////
     //// IMPORTANT MAP CORE OBJECT//////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////
@@ -1299,7 +1318,7 @@
         lng: -81.431
       };
       map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 8,
+        zoom: 7,
         center: orlando,
         mapTypeControl: true,
         ////////// MAP  OR Satellite AND ZOOM AND STREETVIEW AND FULLSCREEN/////
@@ -1316,6 +1335,12 @@
         }
         //  mapTypeId: 'roadmap'
       });
+      trafficLayer = new google.maps.TrafficLayer();
+      var opt = {
+        minZoom: 7,
+        maxZoom: 13
+      };
+      map.setOptions(opt);
 
       bounds = new google.maps.LatLngBounds();
 
@@ -1361,18 +1386,7 @@
       /////////////////////////Info Window Code begins/////////////////////////
     }
 
-    function goPopulateInterchanges(interchangeData) {
-      //console.log(locationData);
-      for (var vector in interchangeData) {
-        //    console.log("for Key:" + key);
-        //  var lat = interchangeData[vector].exitCoordinates[0];
-        //  var lng = interchangeData[vector].exitCoordinates[1];
-        var interchanges = new google.maps.LatLng(interchangeData[vector].exitCoordinates[0], interchangeData[vector].exitCoordinates[1]);
-        var interChangeName = interchangeData[vector].exitName;
-        //  var plazas = locationData[key][j][1];
-        addInterchangesMarker(interchanges, interChangeName);
-      }
-    }
+
 
     function goPopulateTollPoints(tollPointsData) {
 
@@ -1382,31 +1396,12 @@
           tollPointsData[arrPointer].tollPlazaCoordinates[1]);
         var tollPointName = tollPointsData[arrPointer].tollPlazaName;
 
-        addMarker(tollPoints, tollPointName);
+        addTollPointMarker(tollPoints, tollPointName);
       }
 
     }
 
-
-    function addInterchangesMarker(location, interchangeName) {
-      marker = new google.maps.Marker({
-        position: location,
-        map: map,
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 4,
-          fillOpacity: 1,
-          strokeOpacity: .8,
-          strokeWeight: 1,
-          fillColor: '#97FF97'
-        },
-      });
-      addInfoWindow(marker, interchangeName);
-    }
-
-    function addMarker(location, tollPointName) {
-
-
+    function addTollPointMarker(location, tollPointName) {
       marker = new google.maps.Marker({
         position: location,
         map: map,
@@ -1423,10 +1418,12 @@
       //  mapMarkers.push(marker);
     }
 
+    //////Regular Info window addup for Toll plazas with just Name as  message
     function addInfoWindow(marker, message) {
       var infowindow = new google.maps.InfoWindow({
         content: message
       });
+
       google.maps.event.addListener(marker, 'click', function() {
         //  hideAllInfoWindows(map);
         if (otherActiveWindow != null) {
@@ -1438,45 +1435,112 @@
 
         otherActiveWindow = infowindow;
       });
+    }
+    ////////////////////////////////////////////////////////////////////////////////
 
+    function goPopulateInterchanges(interchangeData) {
+      //console.log(locationData);
+      var interchangeType = "entry";
+      for (var vector in interchangeData) {
+        //    console.log("for Key:" + key);
+        //  var lat = interchangeData[vector].exitCoordinates[0];
+        //  var lng = interchangeData[vector].exitCoordinates[1];
+        var interchanges = new google.maps.LatLng(interchangeData[vector].exitCoordinates[0], interchangeData[vector].exitCoordinates[1]);
+        var interChangeName = interchangeData[vector].exitName;
+        var exitNum = interchangeData[vector].exitNum;
+        var payPerPaymethod = interchangeData[vector].tollPerAxlePerMethod[0];
+
+        var axleNum = payPerPaymethod.axle;
+        var sunPassPerAxle = payPerPaymethod.sunPass;
+        var cashPerAxle = payPerPaymethod.cash;
+        var exitAttributes = {
+          "exitRegion": interchangeData[vector].exitRegion,
+          "exitFacility": interchangeData[vector].exitFacility,
+            "exitName": interchangeData[vector].exitName,
+            "exitNum": interchangeData[vector].exitNum
+          };
+        //  console.log(exitAttributes);
+
+        //  var plazas = locationData[key][j][1];
+        addInterchangesMarker(interchanges, interChangeName, exitNum, axleNum, sunPassPerAxle, cashPerAxle, exitAttributes, interchangeType);
+      }
     }
 
-    function hideAllInfoWindows(map, marker) {
-      mapMarkers.forEach(function(marker) {
-        marker.infowindow.close(map, marker);
+    function addInterchangesMarker(location, interChangeName, interchangeNum, axleNum, sunPassPerAxle, cashPerAxle, exitAttributes, interchangeType) {
+      var shade ='#97FF97'
+      if(interchangeType==="exit"){
+        shade:'#ff0000';
+      }
+
+      marker1 = new google.maps.Marker({
+        position: location,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 4,
+          fillOpacity: 1,
+          strokeOpacity: .8,
+          strokeWeight: 1,
+          fillColor: shade
+        },
+      });
+      mapMarkers.push(marker1);
+      addInterchangeInfoWindow(marker1, interChangeName, interchangeNum, axleNum, sunPassPerAxle, cashPerAxle, exitAttributes);
+    }
+
+
+    function myFunction() {
+      console.log("In myFunction");
+     console.log(GUIRegionSrc);
+     console.log(GUIFacilitySrc);
+     console.log(GUIExitSrc);
+      loadDestinationExitsForSourceExit(GUIRegionSrc,GUIFacilitySrc,GUIExitSrc);
+    }
+
+    ///InfoWindow for interchange units with just complete InterchangeData.
+    function addInterchangeInfoWindow(marker, message, interchangeNum, axleNum, sunPassPerAxle, cashPerAxle, exitAttributes) {
+
+      //console.log(exitAttributes);
+      //console.log(JSON.parse(exitAttributes));
+      var infowindow = new google.maps.InfoWindow({
+        content: message
+      });
+
+
+      google.maps.event.addListener(marker, 'click', function() {
+        GUIRegionSrc = exitAttributes.exitRegion;
+        GUIFacilitySrc = exitAttributes.exitFacility;
+        GUIExitSrc = exitAttributes.exitName;
+        infowindow.setContent('<p>Exit Name: ' + message + '</p>' +
+          '<p>Exit Number: ' + interchangeNum + '</p>' +
+          '<p>Axle Count: ' + axleNum +'&nbsp Sunpass:'+ sunPassPerAxle+' &nbsp Cash: '+cashPerAxle +'</p>' +
+          '<button type="button" id="btnSelectStart" onclick="myFunction()">Select Start</button>');
+
+        if (otherActiveWindow != null) {
+          console.log("non active window closed");
+          otherActiveWindow.close();
+        }
+
+        infowindow.open(map, this);
+        otherActiveWindow = infowindow;
       });
     }
 
-    /*
-        function setCoordinates(secData,map){
-          var positionGeoList =[];
-          var tollSectionRouteGeoMetry = this;
-          axios.post(getRouteGeometryUrl, secData)
+    /////MAP GUI Destination pop up
+        function loadDestinationExitsForSourceExit(srcRegionSelected, srcFacilitySelected, srcExitSelected){
+          var data = {
+            "region": srcRegionSelected,
+            "facility": srcFacilitySelected,
+            "exit": srcExitSelected
+          };
+          console.log(data);
+          axios.post(getMapDestinationExitsUrl, data)
             .then(function(response) {
-              console.log(response);
+               console.log(response);
               if (response.status == 200) {
-                this.tollSectionGeoData = response.data.content;
-                tollSectionRouteGeoMetry = JSON.parse(this.tollSectionGeoData);
-                var tripRoutes = tollSectionRouteGeoMetry.results[0].routes;
-
-                if (tripRoutes !== undefined) {
-                  console.log(tripRoutes.length);
-                  for (var i = 0; i < tripRoutes.length; i++) {
-                    //positionGeoList =[];
-                    for (var j = 0; j < tripRoutes[i].route_geom.coordinates.length; j++) {
-                      var lat = tripRoutes[i].route_geom.coordinates[1];
-                      var lng = tripRoutes[i].route_geom.coordinates[0];
-                      console.log(lat+" : "+lng);
-                      var positionll = new google.maps.LatLng(lat, lng);
-                      console.log(positionll);
-                      positionGeoList.push(positionll);
-                    //  console.log(positionGeoList);
-                    }
-                  }
-                  addPolyLine(map,positionGeoList);
-                }
-
-
+                this.desMapAttributes = response.data.qualifiedExits;
+                  console.log(desMapAttributes);
+               goPopulateExitInterchanges(desMapAttributes);
               }
             }.bind(this))
             .catch(function(error) {
@@ -1484,66 +1548,168 @@
             });
         }
 
-        function addPolyLine(map,tollRoadSectionGeos){
-          console.log("in polyfill");
-          var axlePath = new google.maps.Polyline({
-            path: tollRoadSectionGeos,
-            geodesic: true,
-            strokeColor: '#00FF00',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-          });
-          console.log("polyfillComplete");
+    function goPopulateExitInterchanges(DestinationExitAttributes){
+       var interchangeType = "exit";
+      for(var validExitPointer in DestinationExitAttributes){
 
-          axlePath.setMap(map);
-        }*/
+        var exitPoints = new google.maps.LatLng(DestinationExitAttributes[validExitPointer].exitCoordinates[0],
+          DestinationExitAttributes[validExitPointer].exitCoordinates[1]);
+          var interChangeName = DestinationExitAttributes[validExitPointer].exitName;
+          var exitNum = DestinationExitAttributes[validExitPointer].exitNum;
+          /*var payPerPaymethod = DestinationExitAttributes[validExitPointer].tollPerAxlePerMethod[0];
 
-    /*
-    function goGetRegions(locationData) {
-      //console.log(locationData);
-      for (var key in locationData) {
-        //    console.log("for Key:" + key);
-        for (var j = 0; j < locationData[key].length; j++) {
-          //    console.log(locationData[key][j]);
-          //  console.log(locationData[key][j][0]);
-          //    console.log(locationData[key][j][1]);
-          var plazas = new google.maps.LatLng(locationData[key][j][0], locationData[key][j][1]);
-          //  var plazas = locationData[key][j][1];
-          addMarker(plazas);
-        }
+          var axleNum = payPerPaymethod.axle;
+          var sunPassPerAxle = payPerPaymethod.sunPass;
+          var cashPerAxle = payPerPaymethod.cash;*/
+          var exitAttributes = {
+            "exitRegion": DestinationExitAttributes[validExitPointer].exitRegion,
+            "exitFacility": DestinationExitAttributes[validExitPointer].exitFacility,
+              "exitName": DestinationExitAttributes[validExitPointer].exitName,
+              "exitNum": DestinationExitAttributes[validExitPointer].exitNum,
+              "entryRegion":DestinationExitAttributes[validExitPointer].entryRegion,
+              "entryFacility":DestinationExitAttributes[validExitPointer].entryFacility,
+              "entryName":DestinationExitAttributes[validExitPointer].entryName
+            };
+
+            addValidExitMarker(exitPoints,exitAttributes,interchangeType);
       }
+
+      deleteMarkers();
+
+    //  addInterchangesMarker(interchanges, interChangeName, exitNum, axleNum, sunPassPerAxle, cashPerAxle, exitAttributes, interchangeType);
     }
 
-    */
-    /*  function addLatLongs(locationData) {
-        console.log(locationData.length);
-        for (var i = 0; i < locationData.length; i++) {
-          var exchanges = new google.maps.LatLng(locationData[i][1], locationData[i][0]);
-          //console.log(locationData[i][0]);
-          //console.log(locationData[i][1])
-          addMarker(exchanges);
-        }
-      }
+    function clearMarkers(){
+      setMapOnAll(null);
+    }
+    function setMapOnAll(map) {
+     for (var i = 0; i < mapMarkers.length; i++) {
+       mapMarkers[i].setMap(map);
+     }
+   }
+   function deleteMarkers(){
+     clearMarkers();
+     mapMarkers = [];
+   }
 
-      function ActualMarker() {
-        console.log(this.responseText);
-      }
+   function addValidExitMarker(validExitMapPoints, validExitAttributes, interchangeType) {
+     var shade ='#97FF97'
+     if(interchangeType==="exit"){
+       shade:'#ff0000';
+     }
 
-      function processLocations(fac) {
-        for (var i = 0; i < fac.results.schemaData.routeSections.length; i++) {
-          for (var j = 0; j < fac.results.schemaData.routeSections[i].coordinates.length; j++)
-            var coords = fac.results.schemaData.routeSections[i].coordinates[j];
-          var latlng = new google.maps.LatLng(coords[1], coords[0]);
-          addMarker(latlng);
-        }
-      }
-      //  fillColor: '#B3B337'
-      function TestMarker() {
-        for (var i = 0; i < locations.length; i++) {
-          var centralpark = new google.maps.LatLng(locations[i][1], locations[i][2]);
-          addMarker(centralpark);
-        }
-      }*/
+     marker2 = new google.maps.Marker({
+       position: validExitMapPoints,
+       map: map,
+       icon: {
+         path: google.maps.SymbolPath.CIRCLE,
+         scale: 4,
+         fillOpacity: 1,
+         strokeOpacity: .8,
+         strokeWeight: 1,
+         fillColor: shade
+       },
+     });
+     exitMapMarkers.push(marker2);
+     addValidEndPointInfoWindow(marker2, validExitAttributes, interchangeType);
+   }
+
+
+   function addValidEndPointInfoWindow(marker, validExitAttributes, interchangeType) {
+
+     //console.log(exitAttributes);
+     //console.log(JSON.parse(exitAttributes));
+     var infowindow = new google.maps.InfoWindow({
+       content: validExitAttributes.exitName
+     });
+
+
+     google.maps.event.addListener(marker, 'click', function() {
+       GUIRegionDes = validExitAttributes.exitRegion;
+       GUIFacilityDes =  validExitAttributes.exitFacility;
+       GUIExitDes =  validExitAttributes.exitName;
+       infowindow.setContent('<p>Exit Name: ' + validExitAttributes.exitName  + '</p>' +
+         '<p>Exit Number: ' + validExitAttributes.exitNum + '</p>' +
+         '<p>Axle Count: ' + '2' +'&nbsp Sunpass:'+ '0.00'+' &nbsp Cash: '+'0.00' +'</p>' +
+         '<button type="button" id="btnCancelStart" onclick="resetMapFunction()">Cancel Start</button>'
+         +'<button type="button" id="btnSelectExit" onclick="myExitFunction()">Select End</button>');
+
+       if (otherActiveWindow != null) {
+         console.log("non active window closed");
+         otherActiveWindow.close();
+       }
+
+       infowindow.open(map, this);
+       otherActiveWindow = infowindow;
+     });
+   }
+var otherActiveWindow;
+   function myExitFunction() {
+     console.log("In myExitFunction");
+    console.log(GUIRegionSrc);
+    console.log(GUIFacilitySrc);
+    console.log(GUIExitSrc);
+    console.log(GUIRegionDes);
+    console.log(GUIFacilityDes);
+    console.log(GUIExitDes);
+  srcRegionSelected = GUIRegionSrc;
+  srcFacilitySelected = GUIFacilitySrc;
+  srcExitSelected = GUIExitSrc;
+  desRegionSelected = GUIRegionDes;
+  desFacilitySelected = GUIFacilityDes;
+  desExitSelected = GUIExitDes;
+  if (otherActiveWindow != null) {
+    console.log("non active window closed");
+    otherActiveWindow.close();
+  }
+
+    loadCalculatedTollForAxles();
+    hideAllDropDownControls();
+   }
+
+function hideAllDropDownControls(){
+  $('#desRegionDrdn').hide();
+  $('#desFacilityDrdn').hide();
+  $('#desExitDrdn').hide();
+  $('#lblDestinationTripEnd').hide();
+  $('#srcRegionDrdn').hide();
+  $('#srcFacilityDrdn').hide();
+  $('#srcExitDrdn').hide();
+  $('#lblSourceTripStart').hide();
+}
+
+function showAllDropDownControls(){
+  $('#desRegionDrdn').show();
+  $('#desFacilityDrdn').show();
+  $('#desExitDrdn').show();
+  $('#lblDestinationTripEnd').show();
+  $('#srcRegionDrdn').show();
+  $('#srcFacilityDrdn').show();
+  $('#srcExitDrdn').show();
+  $('#lblSourceTripStart').show();
+}
+
+function resetMapFunction(){
+showAllDropDownControls();
+deleteVexitMarkers();
+}
+
+
+
+/*function clearMarkers(){
+  setMapOnAll(null);
+}*/
+function setMapOnVexit(map) {
+ for (var i = 0; i < exitMapMarkers.length; i++) {
+   exitMapMarkers[i].setMap(map);
+ }
+}
+function deleteVexitMarkers(){
+ setMapOnVexit(null);
+ exitMapMarkers = [];
+}
+
+
   </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDpKvus3VMT0RQuDbJlWXZiZE2k4lQlrI&callback=initMap" async defer></script>
   <!--  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDpKvus3VMT0RQuDbJlWXZiZE2k4lQlrI&callback=initMap"-->

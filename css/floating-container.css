@@ -9,7 +9,7 @@
     height: 750 px;
     width: 300px;
     position: absolute;
-    top: 11px;
+    top: 16px;
     right:10px;
     background-color: #fff;
     border-radius: 2px;
@@ -29,7 +29,8 @@
 }
 
 #calc-title {
-    padding-top: 4px;
+    padding-right: 4px;
+      padding-top: 4px;
 }
 
 
@@ -37,8 +38,10 @@
     position: absolute;
     text-align: left;
     }
+/*#FDOTHeader{
+  padding-left: : 4px;
 
-
+}*/
 
 
 .label{
