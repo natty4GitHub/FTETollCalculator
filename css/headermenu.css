@@ -1,0 +1,72 @@
+/*#hvr-underline-reveal{display:inline-block;vertical-align:middle;-webkit-transform:perspective(1px) translateZ(0);transform:perspective(1px) translateZ(0);box-shadow:0 0 1px transparent;position:relative;overflow:hidden}*/
+
+/*
+.hvr-underline-reveal{
+  display:inline-block;
+  vertical-align:middle;
+  -webkit-transform:perspective(1px) translateZ(0);
+  transform:perspective(1px) translateZ(0);
+  box-shadow:0 0 1px transparent;
+  position:relative;
+  overflow:hidden}*/
+
+
+
+.li-menu-items-nodot{
+   list-style: none;
+}
+
+nav > ul > li > a:hover {
+border-bottom: 3px solid #ffffff;
+text-decoration: none;
+transition: all 0.5s ease-in-out;
+}
+
+.menu-column {
+    -webkit-column-count: 1; /* Chrome, Safari, Opera */
+    -moz-column-count: 1; /* Firefox */
+    column-count: 1;
+    -webkit-column-gap: 3px; /* Chrome, Safari, Opera */
+    -moz-column-gap: 3px; /* Firefox */
+    column-gap: 3px;
+    -webkit-column-rule-style: solid; /* Chrome, Safari, Opera */
+    -moz-column-rule-style: solid; /* Firefox */
+    column-rule-style: solid;
+    -webkit-column-rule-color: grey; /* Chrome, Safari, Opera */
+    -moz-column-rule-color: grey; /* Firefox */
+    column-rule-color: grey;
+}
+
+
+  .hover-underline-menu {
+    width: 100%;
+  }
+
+  .hover-underline-menu .menu {
+    background-color: #009d56;
+  }
+
+  .hover-underline-menu .menu a {
+    color: #fefefe;
+    padding: 1.2rem 1.5rem;
+  }
+
+  .hover-underline-menu .menu .underline-from-center {
+    position: relative;
+  }
+
+  .hover-underline-menu .menu .underline-from-center::after {
+    content: "";
+    position: absolute;
+    top: calc(100% - 0.125rem);
+    border-bottom: 0.125rem solid #fefefe;
+    left: 50%;
+    right: 50%;
+    transition: all 0.5s ease;
+  }
+
+  .hover-underline-menu .menu .underline-from-center:hover::after {
+    left: 0;
+    right: 0;
+    transition: all 0.5s ease;
+  }
