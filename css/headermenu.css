@@ -19,23 +19,26 @@
 nav > ul > li > a:hover {
 border-bottom: 3px solid #ffffff;
 text-decoration: none;
-transition: all 0.5s ease-in-out;
+transition: all 0.2s ease-in-out;
 }
 
-.menu-column {
+
+
+/*
+menu-column {
     -webkit-column-count: 1; /* Chrome, Safari, Opera */
-    -moz-column-count: 1; /* Firefox */
-    column-count: 1;
-    -webkit-column-gap: 3px; /* Chrome, Safari, Opera */
-    -moz-column-gap: 3px; /* Firefox */
-    column-gap: 3px;
-    -webkit-column-rule-style: solid; /* Chrome, Safari, Opera */
-    -moz-column-rule-style: solid; /* Firefox */
-    column-rule-style: solid;
-    -webkit-column-rule-color: grey; /* Chrome, Safari, Opera */
-    -moz-column-rule-color: grey; /* Firefox */
-    column-rule-color: grey;
-}
+  /*  -moz-column-count: 1; /* Firefox */
+    /*column-count: 1;
+    /*-webkit-column-gap: 3px; /* Chrome, Safari, Opera */
+/*    -moz-column-gap: 3px; /* Firefox */
+  /*  column-gap: 3px;
+/*    -webkit-column-rule-style: solid; /* Chrome, Safari, Opera */
+  /*  -moz-column-rule-style: solid; /* Firefox */
+  /*  column-rule-style: solid;
+  /*  -webkit-column-rule-color: grey; /* Chrome, Safari, Opera */
+  /*  -moz-column-rule-color: grey; /* Firefox */
+  /*  column-rule-color: grey;
+}*/
 
 
   .hover-underline-menu {

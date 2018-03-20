@@ -154,3 +154,6 @@
 .printer-span-padding{
   padding-left: 17px;
 }
+
+/*Pop Over route details*/
+.popover ul li{font-size:12x;color:#003366;}

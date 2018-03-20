@@ -26,6 +26,7 @@
   <script src="js/getQualifiedExits.js"></script>
   <script src="js/getTollRoutes.js"></script>
   <script src="js/Queue.js"></script>
+  <script src="js/LinkedHashMap.js"></script>
   <style>
     /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -47,28 +48,29 @@
   background:#fff;
   width:144px;height:90px;
   padding-left:4px;padding-right:10px;padding-top:4px">
-    <span>
-      <img src="img/Sunpass_TC_logo.svg">
+    <span class="headerSpan">
+      <img src="img/Sunpass_TC_logo.png" >
+      <!--mix-blend-mode: multiply;-->
     </span>
   </div>
   <div class="container">
-     <nav class="navbar-default"  style="position:fixed;z-index:4;background:#009d56;top:15px;left:146px;width:230px;height:52px">
-       <div class="collapse navbar-collapse">
-         <ul class="nav navbar-nav">
-           <li><a href="#" class="hover-underline-menu"  data-menu-underline-from-center style="color:white;font-size:26px"> Toll Calculator</a></li>
-         </ul>
-       </div>
-     </nav>
-   </div>
- <div class="container" style="position:fixed;z-index:4;background:#009d56;top:15px;left:376px;height:52px;padding-top:16px;vertical-align:center;width:380px">
-  <nav class="hover-underline-menu" data-menu-underline-from-center>
-  <ul class="menu align-center navbar-nav">
-    <li class="li-menu-items-nodot"><a href="#" style="color:white;font-size:15px;padding-left:5px;padding-right:5px"><img src="img/UsingCalculator_Icon.png"> Using the calculator</a></li>
-    <li class="li-menu-items-nodot"><a href="#"style="color:white;font-size:15px;padding-left:5px;padding-right:5px"><img src="img/Resources_Icon.png"> Resources</a></li>
-  </ul>
-</nav>
-</div>
- <!--<div class="container">
+    <nav class="navbar-default" style="position:fixed;z-index:4;background:#009d56;top:15px;left:146px;width:230px;height:52px">
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="#" class="hover-underline-menu" data-menu-underline-from-center style="color:white;font-size:26px"> Toll Calculator</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="container" style="position:fixed;z-index:4;background:#009d56;top:15px;left:376px;height:52px;padding-top:16px;vertical-align:center;width:380px">
+    <nav class="hover-underline-menu" data-menu-underline-from-center>
+      <ul class="menu align-center navbar-nav">
+        <li class="li-menu-items-nodot"><a href="#" style="color:white;font-size:16px;padding-left:5px;padding-right:5px"><img src="img/UsingCalculator_Icon.png"> Using the calculator</a></li>
+        <li class="li-menu-items-nodot"><a href="#" style="color:white;font-size:16px;padding-left:5px;padding-right:5px"><img src="img/Resources_Icon.png"> Resources</a></li>
+      </ul>
+    </nav>
+  </div>
+  <!--<div class="container">
     <nav class="navbar-default"  style="position:fixed;z-index:4;background:#009d56;top:15px;left:146px;">
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
@@ -79,7 +81,7 @@
       </div>
     </nav>
   </div>-->
-<!--  <div id="container-fluid" style="position:fixed;top:100px;left:10px;z-index:4;background:none">
+  <!--  <div id="container-fluid" style="position:fixed;top:100px;left:10px;z-index:4;background:none">
     <img src="img/Apple_App_Store_Button.png">
   </div>
   <div id="container-fluid" style="position:fixed;top:140px;left:10px;z-index:4;background:none">
@@ -171,10 +173,10 @@
         </li>
       </ul>
       </span>
-      <span style="padding-left:20px;padding-right:20px">
+      <!--  <span style="padding-left:20px;padding-right:20px">
       <select class="selectpicker curtain-menu-shadow .dropdown-menu-axle" hidden="true" id="ddlPaymentType" title="AXLE" data-live-search="true" data-size="1">
     <!--   <option value="select">Payment Type</option>-->
-       <option>Sunpass</option>
+      <!--   <option>Sunpass</option>
        <option>Cash/Toll By Plate</option>
 
      </select>
@@ -183,7 +185,7 @@
       <select class="selectpicker curtain-menu-shadow .dropdown-menu-axle" hidden="true" id="ddlAxleCount" title="AXLE" data-live-search="true" data-size="1">
       <!-- <option value="select">Axles</option>-->
       <!-- <option>1</option>-->
-       <option>2</option>
+      <!--     <option>2</option>
        <option>3</option>
        <option>4</option>
        <option>5</option>
@@ -191,7 +193,7 @@
        <option>7</option>
        <option>8</option>
      </select>
-   </span>
+   </span> -->
     </div>
     <div class="bottom-between-dropdowns"></div>
     <div class="container-fluid" id="tripPlanner">
@@ -253,7 +255,7 @@
       <div class="bottom"></div>
       <div class="containter-fluid">
         <span>
-                   <span class="spanpadding printer-span-padding ">
+                   <span class="spanpadding printer-span-padding " id="lblTollPaymentIndicator">
                        <img src="img/SUNPASS_button.png">
                      </span>
         <span style="color:green;text-align:center;font-size: 25px" class="label .axlepayment" id="lblTollValue"> $ 0.00
@@ -262,11 +264,14 @@
       </div>
       <div class="bottom-between-dropdowns" style="padding-bottom:0px; padding-top:3px;"></div>
       <div class="bottom"></div>
-      <div><button class="button" id="btnTraffic"><img src="img/Traffic Cars.png"></>
+      <div><button class="btn btn-default" id="btnTraffic" style="border:0px solid transparent;"> <img src="img/Traffic Cars.png"> Traffic</>
         <!--<div style="color:black;text-align:left;font-size: 12px" class="label" id="lblTraffic">Traffic</div></div>-->
-      <div><button class="button" id="btnReset"><img src="img/Reset Icon.png"></></div>
+      <div><button class="btn btn-default" id="btnReset" style="border:0px solid transparent;"><img src="img/Reset Icon.png"> Reset</></div>
     <!--  <div style="color:black;text-align:left;font-size: 12px" class="label" id="lblReset">Reset</div></div>-->
     </div>
+    <div class="bottom-between-dropdowns"></div>
+    <div class="bottom"></div>
+    <a href="#" class="btn btn-default" id="btnToggleRouteDetails" data-toggle="popover" data-trigger='focus' data-placement="left" title="Route Detail">Route Detail  <span class="caret"></span></a>
   </div>
 <!------------>
   <div class="floating-panel-two">
@@ -404,8 +409,8 @@
   <!--<p>Click on the map to add interchanges </p> -->
   <script>
     //  var baseURL = "http://165.227.188.171:9991/";
-    var baseURL = "http://192.168.1.142:9991/";
-    var devBaseURL = "http://192.168.1.142:9991/";
+    var baseURL = "http://192.168.200.25:9991/";
+    var devBaseURL = "http://192.168.200.25:9991/";
     //  var devBaseURL = "http://172.20.10.7.:9991/";
     var getFacilityurl = baseURL.concat("facility");
     var getRegionsurl = baseURL.concat("regions");
@@ -432,7 +437,7 @@
     var axleCount = 2;
     var paymentMethod = "sunPass";
     var paymentId = "sp";
-    var sunPassToll = 0;
+    var generalToll = 0;
     var ddlArray = [];
     var queue = new Queue();
     var axlePath;
@@ -441,6 +446,7 @@
     var exitMapMarkers = [];
     var otherActiveWindow;
     var isSinglePoint = false;
+    var isTripUniqueFlag = false;
     var trafficLayer;
     var GUIRegionSrc;
     var GUIFacilitySrc;
@@ -448,6 +454,13 @@
     var GUIRegionDes;
     var GUIFacilityDes;
     var GUIExitDes;
+    var tripVerificationResponse;
+    var tripDetails;
+    var tripDetailStart;
+    var tripDetailEnd;
+    var tripDetailTollPlazas;
+    var tripDetailStartToll;
+    var tripDetailEndToll;
     var TripStateEnum = Object.freeze({
       "start": 0,
       "end": 1,
@@ -469,7 +482,7 @@
         this.spValue = s;
       }
     };
-
+    var lru = new LinkedHashMap(3);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -508,37 +521,27 @@
         loadCalculatedTollForAxles();
       });*/
 
-    /*$('#ddlGuiAxleCount').on('change', function() {
-      paymentMethod = $(this).find("option:selected").val();
-      if (paymentMethod === "Cash/Toll By Plate") {
-        paymentId = "cash";
-      }
-      if (paymentMethod === "Sunpass") {
-        paymentId = "sp";
-      }
-
-      console.log(paymentMethod);
-      console.log(paymentId);
-      loadCalculatedTollForAxles();
-    });*/
-    /*  $(ddlGuiAxleCount).click(function () {
-          alert($(this).attr('data-input'));
-      });*/
-
-
-$("[data-menu-underline-from-center] a").addClass("underline-from-center");
+    $("[data-menu-underline-from-center] a").addClass("underline-from-center");
 
 
     $(document).ready(function() {
       $("ul[id*=ddlUlPaymentType] li").click(function() {
+
+        //ddlGuiPaymentType
+
         var index = $(this).index();
         if (index == 0) {
           paymentMethod = "Sunpass";
           paymentId = "sp";
+          //lblTollPaymentIndicator
+          document.getElementById('ddlGuiPaymentType').innerHTML = "<img src=\"img/SunPass_Button_icon.svg\" width=\"76px\" height=\"34px\"/> <span class=\"caret\">";
+          document.getElementById('lblTollPaymentIndicator').innerHTML = "<img src=\"img/SunPass_Button_icon.svg\" width=\"76px\" height=\"34px\"/>";
         }
         if (index == 2) {
           paymentMethod = "Cash/Toll By Plate";
           paymentId = "cash";
+          document.getElementById('ddlGuiPaymentType').innerHTML = "<img src=\"img/Cash_TBP_selector.svg\" width=\"76px\" height=\"34px\"/> <span class=\"caret\">";
+          document.getElementById('lblTollPaymentIndicator').innerHTML = "<img src=\"img/Cash_TBP_selector.svg\" width=\"76px\" height=\"34px\"/>";
         }
 
         console.log(paymentMethod);
@@ -551,32 +554,41 @@ $("[data-menu-underline-from-center] a").addClass("underline-from-center");
 
     $(document).ready(function() {
       $("ul[id*=ddlUlAxleCount] li").click(function() {
-
+        //ddlGuiAxleCount
         var index = $(this).index();
         switch (index) {
           case 0:
             axleCount = 2;
+            loadDropDownImage(axleCount);
+            //    document.getElementById('ddlGuiAxleCount').innerHTML = "<img src=\"img/2Axles.svg\" width=\"76px\" height=\"34px\"/> <span class=\"caret\">" ;
             break;
           case 2:
             axleCount = 3;
+            loadDropDownImage(axleCount);
             break;
           case 4:
             axleCount = 4;
+            loadDropDownImage(axleCount);
             break;
           case 6:
             axleCount = 5;
+            loadDropDownImage(axleCount);
             break;
           case 8:
             axleCount = 6;
+            loadDropDownImage(axleCount);
             break;
           case 10:
             axleCount = 7;
+            loadDropDownImage(axleCount);
             break;
           case 12:
             axleCount = 8;
+            loadDropDownImage(axleCount);
             break;
           default:
             axleCount = 2;
+            loadDropDownImage(axleCount);
             break;
         }
         console.log(index);
@@ -586,6 +598,14 @@ $("[data-menu-underline-from-center] a").addClass("underline-from-center");
         //  alert('Index is: '+index );
       });
     });
+
+    function loadDropDownImage(AxleCount) {
+      var aCount = AxleCount;
+      var imageName = aCount + "Axles.svg";
+      document.getElementById('ddlGuiAxleCount').innerHTML = "<img src=\"img/" + imageName + "\" width=\"76px\" height=\"34px\"/> <span class=\"caret\">";
+
+    }
+
 
     //Source Region Dropdown
     $('#srcRegionDrdn').on('change', function() {
@@ -815,6 +835,56 @@ $("[data-menu-underline-from-center] a").addClass("underline-from-center");
 
     });
 
+    ///////////////////////////////////////////////////////////////TRIPDETAILS////////////////////////
+    ///Trip Details Pop over toggle button jquery////////////////////////////////////////////////////
+    $(document).ready(function() {
+      $('[data-toggle="popover"]').popover({
+        delay: 10
+      });
+    });
+    var entryRD = "Trip Start";
+    var exitRD = "Trip End";
+    var startTollCost = "0.00";
+    var endTollCost = "0.00"
+    if (srcExitSelected && desExitSelected) {
+      entryRD = srcExitSelected;
+      exitRD = desExitSelected;
+    }
+
+
+    $('[data-toggle="popover"]').on('inserted.bs.popover', function() {
+   if (tripDetailStart && tripDetailEnd) {
+        if (paymentId) {
+          if (paymentId === "sp") {
+            startTollCost = tripDetailStart.sp>0 ? tripDetailStart.sp :"0.00";
+            endTollCost = tripDetailEnd.sp>0 ? tripDetailStart.sp :"0.00";
+          } else {
+            startTollCost = tripDetailStart.cash>0 ? tripDetailStart.cash :"0.00";
+            endTollCost = tripDetailEnd.cash>0 ? tripDetailStart.cash :"0.00";
+          }
+        }
+      }
+
+      // Create the inside link.
+      $inside = $('<ul class="divider"><li>Start Point:' + entryRD + ' - $ ' + startTollCost + ' </li><li>End Point:' + exitRD + ' - $ ' + endTollCost + ' </li></ul>');
+      $('.popover-content').append($inside[0])
+
+      if (tripDetailTollPlazas && paymentId) {
+        tripDetailTollPlazas.forEach(function(tripElement) {
+          if (paymentId === "sp") {
+            $tollPlazasContent = $('<ul class="divider"><li>' + tripElement.name + ' - Sunpass - $' + tripElement.sp + ' </li></ul>');
+          } else {
+            $tollPlazasContent = $('<ul class="divider"><li>' + tripElement.name + ' - Cash - $' + tripElement.cash + ' </li></ul>');
+          }
+          $('.popover-content').append($tollPlazasContent[0])
+        });
+      }
+      //$tollPlazasContent = $('<ul class="divider"><li>Start Point:' + exitRD + ' </li><li>End Point:' + entryRD + ' </li></ul>');
+      // Add the click event-handler only once
+      //$('.popover-content').append($tollPlazasContent[0])
+    })
+
+
     /////////////////Functions to Reset the DropDown Chain/////////////////////////////////////////////////////////////////
     function resetDropDownChain(ddlChainindex) {
       if (Boolean(isSinglePoint)) {
@@ -876,36 +946,12 @@ $("[data-menu-underline-from-center] a").addClass("underline-from-center");
         .catch(function(error) {
           console.log(error);
         });
-      //  var sourcefacilityList = getFacility(regionName, getFacilityurl);
-
-
-      /*  if(typeof sourcefacilityList !== "undefined" && typeof sourcefacilityList !==null ){
-        for (var j = 0; j < sourcefacilityList.length; j++) {
-      //    console.log(sourcefacilityList[j]);
-        }
-
-      }*/
-
-      /*    $('.srcFacilityDrdn').val('default');
-          $('.srcFacilityDrdn').selectpicker('refresh');*/
-
-      /*      $('.srcFacilityDrdn').val('default');
-               $('.srcFacilityDrdn').selectpicker('refresh')*/
-      //    $('#srcFacilityDrdn').val('').selectpicker('refresh');
-      //  $(this.element).selectpicker("refresh");
     }
 
 
 
     // Exits pulled for given region and facility method
     function loadExitsForSourceRegionAndFacility(srcRegionSelected, srcFacilitySelected) {
-
-      /*    var sourceexitList = getExitsForRegionAndFacility(srcRegionSelected, srcFacilitySelected, getExitUrl);
-          console.log("Before loading Source Exits DD");
-          console.log(sourceexitList);
-          for (var j = 0; j < sourceexitList.length; j++) {
-            console.log(sourceexitList[j]);
-          }*/
       var newitemnum = 0;
       var newitemdesc = "SELECT EXIT";
       var data = {
@@ -1282,206 +1328,248 @@ $("[data-menu-underline-from-center] a").addClass("underline-from-center");
     // Load TollRoutes between Trip Start to Trip end for given axle
     function loadCalculatedTollForAxles() {
 
-      /*var tollRoutes = getTollRoutes(srcRegionSelected,
-        srcFacilitySelected,
-        srcExitSelected,
-        desRegionSelected,
-        desFacilitySelected,
-        desExitSelected,
-        axleCount,
-        getTollRoutesUrl);
-      console.log("Getting Toll Routes");
-      console.log(tollRoutes);
+      if (axleCount && srcRegionSelected && srcFacilitySelected && srcExitSelected &&
+        desRegionSelected && desFacilitySelected && desExitSelected) {
+        var tollCalcData = {
+          "source": {
+            "region": srcRegionSelected.toUpperCase(),
+            "facility": srcFacilitySelected,
+            "exit": srcExitSelected
+          },
 
-      console.log(tollRoutes.results[0].tollAmounts.sp);
-      var spAmount = tollRoutes.results[0].tollAmounts.sp;
-      //  console.log(spAmount);
-      //  getTollValue();
-      if (spAmount !== undefined) {
-        sunPassToll = spAmount;
-        //  document.getElementById('lblTollValue').innerHTML = sunPassToll.concat("$");
-      }
-      document.getElementById('lblTollValue').innerHTML = sunPassToll + " $"; */
+          "destination": {
+            "region": desRegionSelected.toUpperCase(),
+            "facility": desFacilitySelected,
+            "exit": desExitSelected
+          },
 
-      if (axleCount) {
-        if (axleCount !== "Axles") {
-          if (srcRegionSelected) {
-            if (srcFacilitySelected) {
-              if (srcExitSelected) {
-                if (desRegionSelected) {
-                  if (desFacilitySelected) {
-                    if (desExitSelected) {
-                      var data = {
-                        "source": {
-                          "region": srcRegionSelected,
-                          "facility": srcFacilitySelected,
-                          "exit": srcExitSelected
-                        },
+          "axlecount": axleCount,
+          "paymentMethod": paymentId
+        };
+        console.log(tollCalcData);
 
-                        "destination": {
-                          "region": desRegionSelected,
-                          "facility": desFacilitySelected,
-                          "exit": desExitSelected
-                        },
+        var tollRate = this;
+        axios.post(getTollRoutesUrl, tollCalcData)
+          .then(function(response) {
+            console.log(response);
+            if (response.status == 200) {
+              this.tollRoutesData = response.data;
+              tollRate = this.tollRoutesData;
+              var spAmount = tollRate.results[0].tollAmounts.sp;
+              var cashAmount = tollRate.results[0].tollAmounts.cash;
+              tripDetails = tollRate.results[0].tollAmounts.routeAmount;
+              tripDetailStart = tollRate.results[0].tollAmounts.routeAmount.start;
+              tripDetailEnd = tollRate.results[0].tollAmounts.routeAmount.end;
+              tripDetailTollPlazas = tollRate.results[0].tollAmounts.routeAmount.tollPlazas;
+              if (spAmount !== undefined && paymentId === "sp") {
+                generalToll = spAmount;
+              }
+              if (cashAmount !== undefined && paymentId === "cash") {
+                generalToll = cashAmount;
+              }
+              localStorage.setItem("currentTrip", JSON.stringify(tollCalcData));
+              console.log(localStorage.length);
+              updateRecentTrips();
+              loadRecentTripsFromLocal();
+              document.getElementById('lblTollValue').innerHTML = "$ " + generalToll.toFixed(2);
+            }
+          }.bind(this))
+          .catch(function(error) {
+            console.log(error);
+          });
 
-                        "axlecount": axleCount
-                      };
-                      console.log(data);
+        //Route Highlighting
 
-                      var tollRate = this;
-                      axios.post(getTollRoutesUrl, data)
-                        .then(function(response) {
-                          console.log(response);
-                          if (response.status == 200) {
-                            this.tollRoutesData = response.data.content;
-                            tollRate = JSON.parse(this.tollRoutesData);
-                            var spAmount = tollRate.results[0].tollAmounts.sp;
-                            var cashAmount = tollRate.results[0].tollAmounts.cash;
-                            if (spAmount !== undefined && paymentId === "sp") {
-                              sunPassToll = spAmount;
-                              //localStorage.setItem("trip1Src",srcExitSelected);
-                              //localStorage.setItem("trip1Des",desExitSelected);
-                              localStorage.setItem("currentTrip", JSON.stringify(data));
-                              console.log(localStorage.length);
-                              updateRecentTrips();
-                              loadRecentTripsFromLocal();
-                            }
-                            if (cashAmount !== undefined && paymentId === "cash") {
-                              sunPassToll = cashAmount;
-                              //tollValue.spValue = sunPassToll;
-                              //= JSON.stringify(data);
-                            }
-                            document.getElementById('lblTollValue').innerHTML = "$ " + sunPassToll.toFixed(2);
-                          }
-                        }.bind(this))
-                        .catch(function(error) {
-                          console.log(error);
-                        });
-
-                      //Route Highlighting
-
-                      var tollSectionRouteGeoMetry = this;
-                      bounds = new google.maps.LatLngBounds();
-                      ///Passing Sample Data////
-                      axios.post(getRouteGeometryUrl, data)
-                        .then(function(response) {
-                          console.log(response);
-                          if (response.status == 200) {
-                            this.tollSectionGeoData = response.data.content;
-                            tollSectionRouteGeoMetry = JSON.parse(this.tollSectionGeoData);
-                            var tripRoutes = tollSectionRouteGeoMetry.results[0].routes;
-                            if (tripRoutes !== undefined) {
-                              positionGeoList = [];
-                              for (var i = 0; i < tripRoutes.length; i++) {
-                                console.log(tripRoutes.length);
-                                for (var j = 0; j < tripRoutes[i].route_geom.coordinates.length; j++) {
-                                  var lat = tripRoutes[i].route_geom.coordinates[j][1];
-                                  var lng = tripRoutes[i].route_geom.coordinates[j][0];
-                                  //      console.log(lat + " : " + lng);
-                                  var positionll = new google.maps.LatLng(lat, lng);
-                                  //    console.log(positionll);
-                                  bounds.extend(positionll);
-                                  positionGeoList.push(positionll);
-                                  //  console.log(positionGeoList);
-                                }
-                              }
-                              console.log("in polyfill");
-                              if (axlePath) {
-                                console.log("Refresh polyfill")
-                                axlePath.setPath(positionGeoList);
-                              } else {
-                                axlePath = new google.maps.Polyline({
-                                  path: positionGeoList,
-                                  geodesic: true,
-                                  strokeColor: '#009d56',
-                                  strokeOpacity: 0.8,
-                                  strokeWeight: 4
-                                });
-                                console.log("new polyfillComplete")
-                                axlePath.setMap(map);
-                              }
-                              map.fitBounds(bounds);
-                              map.panToBounds(bounds);
-                            }
-                          }
-                        }.bind(this))
-                        .catch(function(error) {
-                          console.log(error);
-                        });
-                    }
+        var tollSectionRouteGeoMetry = this;
+        bounds = new google.maps.LatLngBounds();
+        ///Passing Sample Data////
+        axios.post(getRouteGeometryUrl, tollCalcData)
+          .then(function(response) {
+            console.log(response);
+            if (response.status == 200) {
+              this.tollSectionGeoData = response.data.content;
+              tollSectionRouteGeoMetry = JSON.parse(this.tollSectionGeoData);
+              var tripRoutes = tollSectionRouteGeoMetry.results[0].routes;
+              if (tripRoutes !== undefined) {
+                positionGeoList = [];
+                for (var i = 0; i < tripRoutes.length; i++) {
+                  console.log(tripRoutes.length);
+                  for (var j = 0; j < tripRoutes[i].route_geom.coordinates.length; j++) {
+                    var lat = tripRoutes[i].route_geom.coordinates[j][1];
+                    var lng = tripRoutes[i].route_geom.coordinates[j][0];
+                    //      console.log(lat + " : " + lng);
+                    var positionll = new google.maps.LatLng(lat, lng);
+                    //    console.log(positionll);
+                    bounds.extend(positionll);
+                    positionGeoList.push(positionll);
+                    //  console.log(positionGeoList);
                   }
                 }
+                console.log("in polyfill");
+                if (axlePath) {
+                  console.log("Refresh polyfill")
+                  axlePath.setPath(positionGeoList);
+                } else {
+                  axlePath = new google.maps.Polyline({
+                    path: positionGeoList,
+                    geodesic: true,
+                    strokeColor: '#009d56',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 4
+                  });
+                  console.log("new polyfillComplete")
+                  axlePath.setMap(map);
+                }
+                map.fitBounds(bounds);
+                map.panToBounds(bounds);
               }
             }
-          }
-        }
+          }.bind(this))
+          .catch(function(error) {
+            console.log(error);
+          });
       }
       //  $('lblTollValue').text =
     }
 
     ///////////////////////Update Recent Trips//////////////////////////////////////
 
+
     function updateRecentTrips() {
-
-      //  var firstTrip =  JSON.parse(localStorage.trip1);
-      var activeTrip = localStorage.getItem("currentTrip");
-      var isQempty = queue.isEmpty();
-      var qLength = queue.getLength();
-
-      if (isQempty === true) {
-        console.log(isQempty);
-        queue.enqueue(activeTrip);
-      } else if (qLength < 3) {
-        queue.enqueue(activeTrip);
-      } else if (qLength >= 3) {
-        queue.dequeue();
-        queue.enqueue(activeTrip);
-        //localStorage()
+      var tripData;
+      var tripitr;
+      var myMap = new Map();
+      //    console.log(trip0);
+      if (localStorage.getItem("currentTrip") && localStorage.getItem("SunpassTrip0") && localStorage.getItem("SunpassTrip1") && localStorage.getItem("SunpassTrip2")) {
+        tripData = localStorage.getItem("currentTrip");
+        console.log(tripData);
+        for (var i = 0; i < 3; i++) {
+          var tripIndexItr = "SunpassTrip" + i;
+          var item2LookUp = localStorage.getItem(tripIndexItr);
+          console.log(item2LookUp);
+          if (jsonEqual(tripData, item2LookUp)) {
+            console.log(true); ///Updates hashmap to true if the trip already exists and Not unique
+            myMap.set(tripIndexItr, true)
+          } else {
+            console.log(false); ///Updates hashmap to false if the trip doesn't exist  and is unique
+            myMap.set(tripIndexItr, false);
+          }
+        }
       }
-      //Persist on local storage(For Offline usage)
-      persistLocalStorage();
+      // Persist in local storage if all trips are uniquetrip
+      if (allUnique(myMap)) {
+        persistLocalStorage();
+      }
 
-      //Pesist on queue (in memory management)
-
-      //Load into the UI components( realtime)
-      //document.getElementById('lblTrip1StartValue').innerHTML = srcTrip;
-      //  document.getElementById('lblTrip1StartValue').innerHTML = desTrip;
+    }
+    // Verify if atleast element one is not unique(true) return false else return true;
+    function allUnique(UniqueMap) {
+      var localMap = UniqueMap;
+      for (var value of localMap.values()) {
+        if (value === true) return false;
+      }
+      return true;
+    }
+    // Verify if two JSON objects are in fact equal in depth.
+    function jsonEqual(a, b) {
+      return JSON.stringify(a) === JSON.stringify(b);
     }
 
-    function callUniqueRecentTrips() {
-      var SelectedData = {
-        "source": {
-          "region": srcRegionSelected,
-          "facility": srcFacilitySelected,
-          "exit": srcExitSelected
-        },
+    function callUniqueRecentTrips(lookUpRouteWithNoPaymentId, tripDataOneOfThreeFromStorage) {
+      var currentData = JSON.parse(lookUpRouteWithNoPaymentId);
+      var recentData = JSON.parse(tripDataOneOfThreeFromStorage);
+      var isUnique = false;
 
-        "destination": {
-          "region": desRegionSelected,
-          "facility": desFacilitySelected,
-          "exit": desExitSelected
-        },
+      var requestData = {
+        "comparableTrips": [{
+            "source": {
+              "region": currentData.source.region,
+              "facility": currentData.source.facility,
+              "exit": currentData.source.exit
+            },
 
-        "axlecount": axleCount,
-        "paymentmethod": paymentId
-      };
+            "destination": {
+              "region": currentData.destination.region,
+              "facility": currentData.destination.facility,
+              "exit": currentData.destination.exit
+            },
+
+            "axlecount": currentData.axlecount,
+            "paymentmethod": currentData.paymentMethod
+          },
+          {
+            "source": {
+              "region": recentData.source.region,
+              "facility": recentData.source.facility,
+              "exit": recentData.source.exit
+            },
+
+            "destination": {
+              "region": recentData.destination.region,
+              "facility": recentData.destination.facility,
+              "exit": recentData.destination.exit
+            },
+
+            "axlecount": recentData.axlecount,
+            "paymentmethod": "sp"
+          }
+        ]
+
+      }
+
+      console.log(JSON.stringify(requestData, null, " "));
+
+      axios.post(getUniqueRecentTripUrl, requestData)
+        .then(function(response) {
+          console.log(response);
+          if (response.status == 200) {
+            this.uniqueTripVerificationData = response.data.uniquetrip;
+            isTripUniqueFlag = this.uniqueTripVerificationData;
+            console.log(this.uniqueTripVerificationData);
+            console.log("IsTripUniqueFlag: " + isTripUniqueFlag);
+          }
+        }.bind(this))
+        .catch(function(error) {
+          console.log(error);
+        });
+
+
+      return isUnique;
     }
+
+
 
     function persistLocalStorage() {
-      var qLength = queue.getLength();
-      var generalTripId = "SunpassTrip";
-      var queueData;
-      if (qLength > 3) {
-        qLength = 3;
+      //    var lastTollCalculatedTrip = activeTrip;
+      //    var tempTripData;
+      if (localStorage.length > 0) {
+        //        tempTripData = localStorage.getItem("currentTrip");
+        if (localStorage.getItem("currentTrip")) {
+          if (localStorage.getItem("SunpassTrip0")) {
+            if (localStorage.getItem("SunpassTrip1")) {
+              localStorage.setItem("SunpassTrip2", localStorage.getItem("SunpassTrip1"));
+            }
+            localStorage.setItem("SunpassTrip1", localStorage.getItem("SunpassTrip0"));
+          }
+          localStorage.setItem("SunpassTrip0", localStorage.getItem("currentTrip"));
+        }
       }
-      for (i = 0; i < qLength; i++) {
-        var tripId = generalTripId + (2 - i);
-        console.log("tripId: " + tripId);
-        queueData = queue.dequeue();
-        console.log("Data in queue: " + queueData)
-        localStorage.setItem(tripId, queueData);
-        queue.enqueue(queueData);
-      }
+
+      /*
+        var qLength = queue.getLength();
+        var generalTripId = "SunpassTrip";
+        var queueData;
+        if (qLength > 3) {
+          qLength = 3;
+        }
+        for (i = 0; i < qLength; i++) {
+          var tripId = generalTripId + (2 - i);
+          console.log("tripId: " + tripId);
+          queueData = queue.dequeue();
+          console.log("Data in queue: " + queueData)
+          localStorage.setItem(tripId, queueData);
+          queue.enqueue(queueData);
+        }*/
       console.log("Persisted to localStorage with size : " + localStorage.length);
     }
 
@@ -1500,7 +1588,7 @@ $("[data-menu-underline-from-center] a").addClass("underline-from-center");
           console.log(tripDataItr);
           var iteratedTripData = JSON.parse(tripDataItr);
           if (tripDataItr) {
-            queue.enqueue(tripDataItr);
+            //  queue.enqueue(tripDataItr);
             console.log(currentStartElement);
             console.log(currentEndElement);
             console.log(iteratedTripData);
@@ -1545,7 +1633,7 @@ $("[data-menu-underline-from-center] a").addClass("underline-from-center");
         zoomControl: true,
         scaleControl: true,
         streetViewControl: true,
-        fullscreenControl: true,
+        fullscreenControl: false, // set this flag if you need fullscreenControl options.
         fullscreenControlOptions: {
           position: google.maps.ControlPosition.LEFT_BOTTOM
         }
@@ -1737,7 +1825,7 @@ $("[data-menu-underline-from-center] a").addClass("underline-from-center");
         infowindow.setContent('<p>Exit Name: ' + message + '</p>' +
           '<p>Exit Number: ' + interchangeNum + '</p>' +
           '<p>Axle Count: ' + axleNum + '&nbsp Sunpass:' + sunPassPerAxle + ' &nbsp Cash: ' + cashPerAxle + '</p>' +
-          '<button type="button" id="btnSelectStart" style="background-color:#12a523; color:#fff;" onclick="myFunction()">Select Start</button>');
+          '<button type="button" id="btnSelectStart" style="background-color:#12a523;width:100%;color:#fff;" onclick="myFunction()">Select Start</button>');
 
         if (otherActiveWindow != null) {
           console.log("non active window closed");
@@ -1780,7 +1868,6 @@ $("[data-menu-underline-from-center] a").addClass("underline-from-center");
         var interChangeName = DestinationExitAttributes[validExitPointer].exitName;
         var exitNum = DestinationExitAttributes[validExitPointer].exitNum;
         /*var payPerPaymethod = DestinationExitAttributes[validExitPointer].tollPerAxlePerMethod[0];
-
         var axleNum = payPerPaymethod.axle;
         var sunPassPerAxle = payPerPaymethod.sunPass;
         var cashPerAxle = payPerPaymethod.cash;*/
@@ -1857,8 +1944,8 @@ $("[data-menu-underline-from-center] a").addClass("underline-from-center");
         infowindow.setContent('<p>Exit Name: ' + validExitAttributes.exitName + '</p>' +
           '<p>Exit Number: ' + validExitAttributes.exitNum + '</p>' +
           '<p>Axle Count: ' + '2' + '&nbsp Sunpass:' + ' $' + '0.00' + ' &nbsp Cash: ' + ' $' + '0.00' + '</p>' +
-          '<button type="button" id="btnCancelStart" onclick="resetMapFunction()">Reset</button>' +
-          '<button type="button" id="btnSelectExit" style="background-color:#12a523; color:#fff;position:relative;"onclick="afterExitSelected()">Select End</button>');
+          '<button type="button" id="btnCancelStart" style="background-color:#ff9933;width:30%;" onclick="resetMapFunction()">Reset</button>' +
+          '<button type="button" id="btnSelectExit" style="background-color:#12a523;width:70%;color:#fff;position:relative;"onclick="afterExitSelected()">Select End</button>');
 
         if (otherActiveWindow != null) {
           console.log("non active window closed");
