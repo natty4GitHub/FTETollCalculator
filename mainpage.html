@@ -48,11 +48,19 @@
   background:#fff;
   width:144px;height:90px;
   padding-left:4px;padding-right:10px;padding-top:4px">
-    <span class="headerSpan">
-      <img src="img/Sunpass_TC_logo.png" >
+    <span class="headerSpan" style="z-index:3">
+      <img src="img/Sunpass_TC_logo.svg" >
       <!--mix-blend-mode: multiply;-->
     </span>
   </div>
+  <!--  <div class="container">
+    <nav class="navbar-default" style="position:fixed;z-index:4;background:#009d56;top:15px;left:0px;width:146px;height:52px">
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+        </ul>
+      </div>
+    </nav>
+  </div>-->
   <div class="container">
     <nav class="navbar-default" style="position:fixed;z-index:4;background:#009d56;top:15px;left:146px;width:230px;height:52px">
       <div class="collapse navbar-collapse">
@@ -62,14 +70,165 @@
       </div>
     </nav>
   </div>
-  <div class="container" style="position:fixed;z-index:4;background:#009d56;top:15px;left:376px;height:52px;padding-top:16px;vertical-align:center;width:380px">
+
+  <div class="container" style="position:fixed;z-index:4;background:#009d56;top:15px;left:376px;height:52px;padding-top:16px;vertical-align:center;width:250px">
+    <div class="dropdown">
+      <button class="btn btn-primary dropdown-toggle hover-underline-menu" style="background:#009d56;top:15px;border: none;padding-top:5px;" type="button" data-toggle="dropdown">
+        <a  style="color:white;font-size:16px;padding-left:5px;padding-right:5px;padding-bottom:10px"><img src="img/UsingCalculator_Icon.png"> Using the calculator</a></button>
+      <ul class="dropdown-menu">
+        <!--<li><a style="color:#009d56" href="#" data-toggle="tooltip" data-placement="right" trigger="focus" title="Using the Calculator is easy, and is based on selecting the beginning and end of a trip on the highway systems. The process of selecting the start exits and end exits is the same, and can be done either on the map or with the toll calculator control box."> -->
+        <li><a style="color:#009d56" data-toggle="modal" data-target="#modal-UTC">
+        "Using the Calculator"</a>
+        </li>
+        <li><a style="color:#009d56" href="http://floridasturnpike.com/travelerInfo.html" data-toggle="tooltip" data-placement="right" trigger="focus" title="Click to navigate to floridasturnpike for other toll transponders">"Other Toll Transponders"
+        </a></li>
+        <li><a style="color:#009d56" href="#" data-toggle="modal" data-target="#Disclaimer-UTC">
+          "Legal Disclaimer"
+      </a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal-UTC" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Using the calculator</h4>
+        </div>
+        <div class="modal-body">
+          <p>"Using the Calculator is easy, and is based on selecting the beginning and end of a trip on the highway systems. The process of selecting the start exits and end exits is the same, and can be done either on the map or with the toll calculator
+            control box."</p>
+          <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+              <li data-target="#myCarousel" data-slide-to="1"></li>
+              <li data-target="#myCarousel" data-slide-to="2"></li>
+              <li data-target="#myCarousel" data-slide-to="3"></li>
+              <li data-target="#myCarousel" data-slide-to="4"></li>
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+              <div class="item active">
+                <img src="img/UTC-s1.png" alt="Start">
+              </div>
+
+              <div class="item">
+                <img src="img/UTC-s2.png" alt="SelectStart">
+              </div>
+
+              <div class="item">
+                <img src="img/UTC-s3.png" alt="StartBubble">
+              </div>
+
+              <div class="item">
+                <img src="img/UTC-s4.png" alt="SelectExit">
+              </div>
+
+              <div class="item">
+                <img src="img/UTC-s5.png" alt="ExitBubble">
+              </div>
+            </div>
+
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+          </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- Modal -->
+  <div id="Disclaimer-UTC" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Legal Disclaimer</h4>
+        </div>
+        <div class="modal-body">
+          <p>Toll rates effective as of October 29, 2017. In the unlikely event that there is a discrepancy between the toll rates shown in this application and those displayed at the toll collection locations, those shown at the toll collection locations
+            are the official toll rates on the Turnpike system facilities.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="container" style="position:fixed;z-index:4;background:#009d56;top:15px;left:626px;height:52px;padding-top:16px;vertical-align:center;width:200px">
+    <div class="dropdown">
+      <button class="btn btn-primary dropdown-toggle hover-underline-menu" style="background:#009d56;top:15px;border: none;padding-top:5px;" type="button" data-toggle="dropdown">
+        <a  style="color:white;font-size:16px;padding-left:5px;padding-right:5px;padding-bottom:10px"><img src="img/Resources_Icon.png"> Resources</a></button>
+      <ul class="dropdown-menu">
+        <li><a style="color:#009d56" href="https://www.sunpass.com/index" data-toggle="tooltip" data-placement="right" trigger="focus" title="SunPass is an innovative prepaid toll program. Using a SunPass transponder allows drivers to travel through toll plazas without stopping. SunPass users will always pay the lowest possible toll rates.">
+        "SunPass"
+        </a></li>
+        <li><a style="color:#009d56" href="https://www.sunpass.com/index" data-toggle="tooltip" data-placement="right" trigger="focus" title="Turnpike systems will either accept TOLL-BY-PLATE® or CASH, and both toll rates are the same" .
+            "TOLL-BY-PLATE systems take a photo of the vehicle’s license plate and send a summary of the driver’s tolls every 30 days, plus a $2.50 administrative charge. CASH systems have two options: pay the exact toll in the ‘Exact Coins Cars Only’ lanes, and if change or a receipt is needed drive through the ‘Change Provided’ lanes">"Cash/TOLL-BY-PLATE"
+        </a></li>
+        <li><a style="color:#009d56" href="http://floridaexpresslanes.com/" data-toggle="tooltip" data-placement="right" trigger="focus">
+          "Florida Express Lanes"
+      </a></li>
+        <li><a style="color:#009d56" href="https://fl511.com/" data-toggle="tooltip" data-placement="right" trigger="focus">
+        "FL511"
+    </a></li>
+        <li><a style="color:#009d56" href="http://www.floridasturnpike.com/travelerInfo.html" data-toggle="tooltip" data-placement="right" trigger="focus">
+      "Traveler Info"
+  </a></li>
+        <li><a style="color:#009d56" href="https://www.sunpass.com/tollSavings" data-toggle="tooltip" data-placement="right" trigger="focus">
+    "Toll Savings"
+</a></li>
+        <li><a style="color:#009d56" href="https://www.sunpass.com/participatingAgencies" data-toggle="tooltip" data-placement="right" trigger="focus">
+  "Participating Agencies"
+</a></li>
+        <li><a style="color:#009d56" href="https://www.sunpass.com/contactSunPass" data-toggle="tooltip" data-placement="right" trigger="focus">
+  "Contact Sunpass"
+</a></li>
+        <li><a style="color:#009d56" href="https://www.sunpass.com/violations" data-toggle="tooltip" data-placement="right" trigger="focus">
+  "Toll Violations"
+</a></li>
+      </ul>
+    </div>
+  </div>
+  <!--  <div class="container" style="position:fixed;z-index:4;background:#009d56;top:15px;left:376px;height:52px;padding-top:16px;vertical-align:center;width:250px">
+    <span>
     <nav class="hover-underline-menu" data-menu-underline-from-center>
       <ul class="menu align-center navbar-nav">
-        <li class="li-menu-items-nodot"><a href="#" style="color:white;font-size:16px;padding-left:5px;padding-right:5px"><img src="img/UsingCalculator_Icon.png"> Using the calculator</a></li>
-        <li class="li-menu-items-nodot"><a href="#" style="color:white;font-size:16px;padding-left:5px;padding-right:5px"><img src="img/Resources_Icon.png"> Resources</a></li>
+        <li class="li-menu-items-nodot"><a href="#" style="color:white;font-size:16px;padding-left:5px;padding-right:5px"><img src="img/UsingCalculator_Icon.png"> Using the calculator</a>
+        </li>
       </ul>
-    </nav>
-  </div>
+     </nav>
+  </span>
+</div>-->
+  <!--<div class="container" style="position:fixed;z-index:4;background:#009d56;top:15px;left:626px;height:52px;padding-top:16px;vertical-align:center;width:200px">
+    <span>
+    <nav class="hover-underline-menu" data-menu-underline-from-center>
+      <ul class="menu align-center navbar-nav">
+        <li class="li-menu-items-nodot"><a href="#" style="color:white;font-size:16px;padding-left:5px;padding-right:5px"><img src="img/Resources_Icon.png"> Resources</a>
+        </li>
+      </ul>
+     </nav>
+  </span>
+</div>-->
+
+
+
   <!--<div class="container">
     <nav class="navbar-default"  style="position:fixed;z-index:4;background:#009d56;top:15px;left:146px;">
       <div class="collapse navbar-collapse">
@@ -409,8 +568,8 @@
   <!--<p>Click on the map to add interchanges </p> -->
   <script>
     //  var baseURL = "http://165.227.188.171:9991/";
-    var baseURL = "http://192.168.200.25:9991/";
-    var devBaseURL = "http://192.168.200.25:9991/";
+    var baseURL = "http://192.168.1.72:9991/";
+    var devBaseURL = "http://192.168.1.72:9991/";
     //  var devBaseURL = "http://172.20.10.7.:9991/";
     var getFacilityurl = baseURL.concat("facility");
     var getRegionsurl = baseURL.concat("regions");
@@ -444,6 +603,7 @@
     var recentTripFlag = false;
     var mapMarkers = [];
     var exitMapMarkers = [];
+    var twoPointMapMarkers = [];
     var otherActiveWindow;
     var isSinglePoint = false;
     var isTripUniqueFlag = false;
@@ -451,6 +611,7 @@
     var GUIRegionSrc;
     var GUIFacilitySrc;
     var GUIExitSrc;
+    var GUILatLngSrc;
     var GUIRegionDes;
     var GUIFacilityDes;
     var GUIExitDes;
@@ -483,6 +644,7 @@
       }
     };
     var lru = new LinkedHashMap(3);
+    var countyLayer;
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -551,6 +713,21 @@
 
       });
     });
+
+    function loadPaymentMethodImage(paymentId) {
+      if (paymentId === "sp") {
+        paymentMethod = "Sunpass";
+        //lblTollPaymentIndicator
+        document.getElementById('ddlGuiPaymentType').innerHTML = "<img src=\"img/SunPass_Button_icon.svg\" width=\"76px\" height=\"34px\"/> <span class=\"caret\">";
+        document.getElementById('lblTollPaymentIndicator').innerHTML = "<img src=\"img/SunPass_Button_icon.svg\" width=\"76px\" height=\"34px\"/>";
+      }
+      if (paymentId === "cash") {
+        paymentMethod = "Cash/Toll By Plate";
+        document.getElementById('ddlGuiPaymentType').innerHTML = "<img src=\"img/Cash_TBP_selector.svg\" width=\"76px\" height=\"34px\"/> <span class=\"caret\">";
+        document.getElementById('lblTollPaymentIndicator').innerHTML = "<img src=\"img/Cash_TBP_selector.svg\" width=\"76px\" height=\"34px\"/>";
+      }
+
+    }
 
     $(document).ready(function() {
       $("ul[id*=ddlUlAxleCount] li").click(function() {
@@ -682,8 +859,10 @@
       console.log(this.trafficLayer);
       if (trafficLayer.getMap() == null) {
         trafficLayer.setMap(map);
+        //  countyLayer.setMap(map);
       } else {
         trafficLayer.setMap(null);
+        countyLayer.setMap(null);
       }
     });
 
@@ -725,7 +904,7 @@
         desFacilitySelected = parsedTripData.destination.facility;
         desExitSelected = parsedTripData.destination.exit;
         axleCount = parsedTripData.axlecount;
-        //paymentId = "sp";
+        paymentId = parsedTripData.paymentMethod;
 
         console.log("Source region returned:" + srcRegionSelected);
         if (axleCount) {
@@ -742,6 +921,8 @@
         loadFacilitiesForDestinationRegion(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected);
         loadExitsForDestinationRegionAndFacility(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected, desFacilitySelected);
         loadCalculatedTollForAxles();
+        loadDropDownImage(axleCount);
+        loadPaymentMethodImage(paymentId);
       }
       console.log("Src: " + srcRegionSelected + ":" + srcFacilitySelected + ":" + srcExitSelected);
       console.log("Des: " + desRegionSelected + ":" + desFacilitySelected + ":" + desExitSelected);
@@ -763,6 +944,8 @@
         desFacilitySelected = parsedTripData.destination.facility;
         desExitSelected = parsedTripData.destination.exit;
         axleCount = parsedTripData.axlecount;
+        paymentId = parsedTripData.paymentMethod;
+
 
 
         if (axleCount) {
@@ -779,6 +962,8 @@
         loadFacilitiesForDestinationRegion(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected);
         loadExitsForDestinationRegionAndFacility(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected, desFacilitySelected);
         loadCalculatedTollForAxles();
+        loadDropDownImage(axleCount);
+        loadPaymentMethodImage(paymentId);
         //    loadFacilitiesForSourceRegion();
       }
       console.log("Src: " + srcRegionSelected + ":" + srcFacilitySelected + ":" + srcExitSelected);
@@ -801,6 +986,8 @@
         desFacilitySelected = parsedTripData.destination.facility;
         desExitSelected = parsedTripData.destination.exit;
         axleCount = parsedTripData.axlecount;
+        paymentId = parsedTripData.paymentMethod;
+
         if (axleCount) {
           $("#ddlAxleCount").val(axleCount);
           $("#ddlPaymentType").val("Sunpass");
@@ -828,6 +1015,8 @@
         loadFacilitiesForDestinationRegion(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected);
         loadExitsForDestinationRegionAndFacility(srcRegionSelected, srcFacilitySelected, srcExitSelected, desRegionSelected, desFacilitySelected);
         loadCalculatedTollForAxles();
+        loadDropDownImage(axleCount);
+        loadPaymentMethodImage(paymentId);
       }
       console.log("Src: " + srcRegionSelected + ":" + srcFacilitySelected + ":" + srcExitSelected);
       console.log("Des: " + desRegionSelected + ":" + desFacilitySelected + ":" + desExitSelected);
@@ -842,43 +1031,50 @@
         delay: 10
       });
     });
-    var entryRD = "Trip Start";
-    var exitRD = "Trip End";
+    var entryRD = "Select an Entry";
+    var exitRD = "Select an Exit";
     var startTollCost = "0.00";
     var endTollCost = "0.00"
-    if (srcExitSelected && desExitSelected) {
-      entryRD = srcExitSelected;
-      exitRD = desExitSelected;
-    }
+
 
 
     $('[data-toggle="popover"]').on('inserted.bs.popover', function() {
-   if (tripDetailStart && tripDetailEnd) {
+      if (srcExitSelected && desExitSelected) {
+        console.log(srcExitSelected);
+        console.log(desExitSelected);
+        entryRD = srcExitSelected;
+        exitRD = desExitSelected;
+      }
+      if (tripDetailStart && tripDetailEnd) {
         if (paymentId) {
           if (paymentId === "sp") {
-            startTollCost = tripDetailStart.sp>0 ? tripDetailStart.sp :"0.00";
-            endTollCost = tripDetailEnd.sp>0 ? tripDetailStart.sp :"0.00";
+            startTollCost = tripDetailStart.sp > 0 ? tripDetailStart.sp : "0.00";
+            endTollCost = tripDetailEnd.sp > 0 ? tripDetailEnd.sp : "0.00";
           } else {
-            startTollCost = tripDetailStart.cash>0 ? tripDetailStart.cash :"0.00";
-            endTollCost = tripDetailEnd.cash>0 ? tripDetailStart.cash :"0.00";
+            startTollCost = tripDetailStart.cash > 0 ? tripDetailStart.cash : "0.00";
+            endTollCost = tripDetailEnd.cash > 0 ? tripDetailEnd.cash : "0.00";
           }
         }
       }
+      startTollCost = parseFloat(startTollCost).toFixed(2);
+      endTollCost = parseFloat(endTollCost).toFixed(2);
 
       // Create the inside link.
-      $inside = $('<ul class="divider"><li>Start Point:' + entryRD + ' - $ ' + startTollCost + ' </li><li>End Point:' + exitRD + ' - $ ' + endTollCost + ' </li></ul>');
+      $inside = $('<ul class="divider"><li style="font-weight: bold;">Start Point: ' + entryRD + ' - $ ' + startTollCost + ' </li></ul>');
       $('.popover-content').append($inside[0])
 
       if (tripDetailTollPlazas && paymentId) {
         tripDetailTollPlazas.forEach(function(tripElement) {
           if (paymentId === "sp") {
-            $tollPlazasContent = $('<ul class="divider"><li>' + tripElement.name + ' - Sunpass - $' + tripElement.sp + ' </li></ul>');
+            $tollPlazasContent = $('<ul class="divider"><li>' + tripElement.name + ' - Sunpass - $' + parseFloat(tripElement.sp).toFixed(2) + ' </li></ul>');
           } else {
-            $tollPlazasContent = $('<ul class="divider"><li>' + tripElement.name + ' - Cash - $' + tripElement.cash + ' </li></ul>');
+            $tollPlazasContent = $('<ul class="divider"><li>' + tripElement.name + ' - Cash - $' + parseFloat(tripElement.cash).toFixed(2) + ' </li></ul>');
           }
           $('.popover-content').append($tollPlazasContent[0])
         });
       }
+      $outside = $('<ul class="divider"><li style="font-weight: bold;">End Point: ' + exitRD + ' - $ ' + endTollCost + ' </li></ul>');
+      $('.popover-content').append($outside[0])
       //$tollPlazasContent = $('<ul class="divider"><li>Start Point:' + exitRD + ' </li><li>End Point:' + entryRD + ' </li></ul>');
       // Add the click event-handler only once
       //$('.popover-content').append($tollPlazasContent[0])
@@ -1378,7 +1574,7 @@
             console.log(error);
           });
 
-        //Route Highlighting
+        //Route Highlighting /usr/lib/jvm/java-8-oracle/jre/bin/java
 
         var tollSectionRouteGeoMetry = this;
         bounds = new google.maps.LatLngBounds();
@@ -1392,8 +1588,8 @@
               var tripRoutes = tollSectionRouteGeoMetry.results[0].routes;
               if (tripRoutes !== undefined) {
                 positionGeoList = [];
+                console.log(tripRoutes.length);
                 for (var i = 0; i < tripRoutes.length; i++) {
-                  console.log(tripRoutes.length);
                   for (var j = 0; j < tripRoutes[i].route_geom.coordinates.length; j++) {
                     var lat = tripRoutes[i].route_geom.coordinates[j][1];
                     var lng = tripRoutes[i].route_geom.coordinates[j][0];
@@ -1403,7 +1599,12 @@
                     bounds.extend(positionll);
                     positionGeoList.push(positionll);
                     //  console.log(positionGeoList);
+
                   }
+                }
+                var destinationLocation = positionGeoList.length;
+                if (positionGeoList.length > 1) {
+                  MarkSourceAndDestinationBubble(positionGeoList[0], positionGeoList[destinationLocation - 1]);
                 }
                 console.log("in polyfill");
                 if (axlePath) {
@@ -1639,6 +1840,45 @@
         }
         //  mapTypeId: 'roadmap'
       });
+
+      /*  var src = 'https://www.google.com/fusiontables/DataSource?docid=1WReDlncBRk7SCwXqDX41RzXF4es9NFruI05VT58';
+        console.log("In KmlLayer");
+
+        countyLayer = new google.maps.KmlLayer(src, {
+          suppressInfoWindows: true,
+          preserveViewport: false,
+          map: map,
+          clickable : false
+        });
+        console.log(countyLayer);
+
+        countyLayer.setMap(map);*/
+      countyLayer = new google.maps.FusionTablesLayer({
+        query: {
+          select: 'geometry',
+          from: '12trATOP9qeUPfNppg_VOHFHXcaPq9QOqXphwKK2n', // Table name is county_regions_2015
+          //from: '1WReDlncBRk7SCwXqDX41RzXF4es9NFruI05VT58' // Table name is county_regions
+        },
+        styleId: 2,
+        styles: [{
+          polygonOptions: {
+            fillOpacity: 0.6
+          }
+        }],
+        suppressInfoWindows: true,
+        map: map
+      });
+      countyLayer.setMap(map);
+
+      google.maps.event.addListener(countyLayer, 'click', function(kmlEvent) {
+        mySystem = kmlEvent.row['name'].value;
+        if (mySystem != "No Turnpike Facilities") {
+        //  setMapToSystem(mySystem);
+          //setShields();
+          countyLayer.setMap(null);
+        }
+      });
+
       trafficLayer = new google.maps.TrafficLayer();
       opt = {
         minZoom: 7,
@@ -1762,8 +2002,8 @@
         var payPerPaymethod = interchangeData[vector].tollPerAxlePerMethod[0];
 
         var axleNum = payPerPaymethod.axle;
-        var sunPassPerAxle = payPerPaymethod.sunPass;
-        var cashPerAxle = payPerPaymethod.cash;
+        var sunPassPerAxle = payPerPaymethod.sunPass.toFixed(2);
+        var cashPerAxle = payPerPaymethod.cash.toFixed(2);
         var exitAttributes = {
           "exitRegion": interchangeData[vector].exitRegion,
           "exitFacility": interchangeData[vector].exitFacility,
@@ -1796,24 +2036,74 @@
         },
       });
       mapMarkers.push(marker1);
-      addInterchangeInfoWindow(marker1, interChangeName, interchangeNum, axleNum, sunPassPerAxle, cashPerAxle, exitAttributes);
+      addInterchangeInfoWindow(marker1, interChangeName, interchangeNum, axleNum, sunPassPerAxle, cashPerAxle, exitAttributes, location);
     }
 
+    function MarkSourceAndDestinationBubble(srcGeoCo, desGeoCo) {
+      SrcMarker = new google.maps.Marker({
+        position: srcGeoCo,
+        map: map,
+        icon: 'img/Green_Arrow.png',
+        scale: 8,
+      });
 
-    function myFunction() {
-      console.log("In myFunction");
+      DesMarker = new google.maps.Marker({
+        position: desGeoCo,
+        map: map,
+        icon: 'img/Red_Arrow.png',
+        scale: 8,
+      });
+      //     delete2PointMarkers();
+      twoPointMapMarkers.push(SrcMarker);
+      twoPointMapMarkers.push(DesMarker);
+
+    }
+
+    function MarkSourceBubble(srcGeoCo) {
+      SrcMarker = new google.maps.Marker({
+        position: srcGeoCo,
+        map: map,
+        icon: 'img/Green_Arrow.png',
+        scale: 8,
+      });
+      //     delete2PointMarkers();
+      twoPointMapMarkers.push(SrcMarker);
+
+    }
+
+    function clear2PointMarkers() {
+      setMapOn2Point(null);
+    }
+
+    function setMapOn2Point(map) {
+      for (var i = 0; i < twoPointMapMarkers.length; i++) {
+        twoPointMapMarkers[i].setMap(map);
+      }
+    }
+
+    function delete2PointMarkers() {
+      clear2PointMarkers();
+      twoPointMapMarkers = [];
+    }
+
+    function btnSelectGUIStart() {
+      console.log("In btnSelectGUIStart");
       console.log(GUIRegionSrc);
       console.log(GUIFacilitySrc);
       console.log(GUIExitSrc);
+      //GUILatLngSrc
+      MarkSourceBubble(GUILatLngSrc);
       loadDestinationExitsForSourceExit(GUIRegionSrc, GUIFacilitySrc, GUIExitSrc);
+
     }
 
     ///InfoWindow for interchange units with just complete InterchangeData.
-    function addInterchangeInfoWindow(marker, message, interchangeNum, axleNum, sunPassPerAxle, cashPerAxle, exitAttributes) {
+    function addInterchangeInfoWindow(marker, message, interchangeNum, axleNum, sunPassPerAxle, cashPerAxle, exitAttributes, location) {
 
       //console.log(exitAttributes);
       //console.log(JSON.parse(exitAttributes));
       var infowindow = new google.maps.InfoWindow({
+        //max
         content: message
       });
 
@@ -1822,10 +2112,13 @@
         GUIRegionSrc = exitAttributes.exitRegion;
         GUIFacilitySrc = exitAttributes.exitFacility;
         GUIExitSrc = exitAttributes.exitName;
-        infowindow.setContent('<p>Exit Name: ' + message + '</p>' +
+        GUILatLngSrc = location;
+        infowindow.setContent('<p>Exit Region: ' + exitAttributes.exitRegion + '</p>' +
+          '<p>Exit Facility: ' + exitAttributes.exitFacility + '</p>' +
+          '<p>Exit Name: ' + exitAttributes.exitName + '</p>' +
           '<p>Exit Number: ' + interchangeNum + '</p>' +
-          '<p>Axle Count: ' + axleNum + '&nbsp Sunpass:' + sunPassPerAxle + ' &nbsp Cash: ' + cashPerAxle + '</p>' +
-          '<button type="button" id="btnSelectStart" style="background-color:#12a523;width:100%;color:#fff;" onclick="myFunction()">Select Start</button>');
+          '<p>Axle Count: ' + axleNum + '&nbsp Sunpass: $' + sunPassPerAxle + ' &nbsp Cash: $' + cashPerAxle + '</p>' +
+          '<button type="button" id="btnSelectStart" style="background-color:#12a523;width:100%;color:#fff;" onclick="btnSelectGUIStart()">Select Start</button>');
 
         if (otherActiveWindow != null) {
           console.log("non active window closed");
@@ -1941,7 +2234,9 @@
         GUIFacilityDes = validExitAttributes.exitFacility;
         GUIExitDes = validExitAttributes.exitName;
 
-        infowindow.setContent('<p>Exit Name: ' + validExitAttributes.exitName + '</p>' +
+        infowindow.setContent('<p>Exit Region: ' + validExitAttributes.exitRegion + '</p>' +
+          '<p>Exit Facility: ' + validExitAttributes.exitFacility + '</p>' +
+          '<p>Exit Name: ' + validExitAttributes.exitName + '</p>' +
           '<p>Exit Number: ' + validExitAttributes.exitNum + '</p>' +
           '<p>Axle Count: ' + '2' + '&nbsp Sunpass:' + ' $' + '0.00' + ' &nbsp Cash: ' + ' $' + '0.00' + '</p>' +
           '<button type="button" id="btnCancelStart" style="background-color:#ff9933;width:30%;" onclick="resetMapFunction()">Reset</button>' +
@@ -1972,6 +2267,8 @@
       desRegionSelected = GUIRegionDes;
       desFacilitySelected = GUIFacilityDes;
       desExitSelected = GUIExitDes;
+      /// To fix the corner scenario bug in case if the user selects two different destination for the same source successively from MAPGUI
+      delete2PointMarkers();
       if (otherActiveWindow != null) {
         console.log("non active window closed");
         otherActiveWindow.close();
@@ -2007,9 +2304,13 @@
       //Unhide Dropdowns that were hidden
       resetTollValue();
       showAllDropDownControls();
+      countyLayer.setMap(map);
 
+      //Reset DropDown chain
+      resetDropDownChain(0);
       //Delete all valid exit markers
       deleteVexitMarkers();
+      delete2PointMarkers();
 
       //Load Origianl markers and exits
       loadDefaultPlazasAndExits();
