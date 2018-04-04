@@ -588,6 +588,7 @@
     var getSinglePointStatusUrl = baseURL.concat("checkSinglePointOutliers");
     var getMapDestinationExitsUrl = devBaseURL.concat("getQualifiedDestinationExitsAttributes");
     var getUniqueRecentTripUrl = devBaseURL.concat("verifyTripUniqueness");
+    var getInterchangesPerRegionurl = baseURL.concat("getPerRegionRouteAttributes");
     var srcRegionSelected;
     var srcFacilitySelected;
     var srcExitSelected;
@@ -862,7 +863,7 @@
         //  countyLayer.setMap(map);
       } else {
         trafficLayer.setMap(null);
-        countyLayer.setMap(null);
+      //  countyLayer.setMap(null);
       }
     });
 
@@ -1871,9 +1872,9 @@
       countyLayer.setMap(map);
 
       google.maps.event.addListener(countyLayer, 'click', function(kmlEvent) {
-        mySystem = kmlEvent.row['name'].value;
-        if (mySystem != "No Turnpike Facilities") {
-        //  setMapToSystem(mySystem);
+        selectedRegion = kmlEvent.row['name'].value;
+        if (selectedRegion != "No Turnpike Facilities") {
+         setBoundsToRegion(selectedRegion);
           //setShields();
           countyLayer.setMap(null);
         }
@@ -1901,6 +1902,55 @@
 
       /////////////////////////Info Window Code begins/////////////////////////
     }
+
+    function setBoundsToRegion(selectedRegion){
+      var zoom2region;
+      switch (selectedRegion) {
+        case "Panhandle Bridges":
+        zoom2region = "FLORIDA PANHANDLE";
+          break;
+        case "Orlando Area":
+        zoom2region = "ORLANDO AREA";
+          break;
+        case "Tampa Area":
+        zoom2region = "TAMPA BAY";
+          break;
+        case "Polk Parkway":
+          zoom2region = "LAKELAND";
+          break;
+        case "Ticket System":
+          zoom2region = "CENTRAL EAST COAST";
+          break;
+        case "South Florida":
+          zoom2region = "SOUTH FLORIDA";
+          break;
+    }
+
+
+   regionalBounds = new google.maps.LatLngBounds();
+      var regionalInterchangeData;
+      var selectedRegion="LAKELAND";
+      var data = "regionName=".concat(zoom2region);
+      axios.post(getInterchangesPerRegionurl, data)
+        .then(function(response) {
+           console.log(response);
+          if (response.status == 200) {
+            regionalInterchangeData = response.data.interchanges;
+            //  return this.someData;
+            for (var vector in regionalInterchangeData) {
+            console.log(regionalInterchangeData[vector]);
+                  var regionalInterchanges = new google.maps.LatLng(regionalInterchangeData[vector].exitCoordinates[0], regionalInterchangeData[vector].exitCoordinates[1]);
+                  regionalBounds.extend(regionalInterchanges);
+                  map.fitBounds(regionalBounds);
+                  map.panToBounds(regionalBounds);
+          }
+        }
+        }.bind(this))
+        .catch(function(error) {
+          console.log(error);
+        });
+
+  }
 
 
     function loadDefaultPlazasAndExits() {
