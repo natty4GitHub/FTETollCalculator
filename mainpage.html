@@ -681,7 +681,7 @@
 
         console.log(paymentMethod);
         console.log(paymentId);
-        loadCalculatedTollForAxles();
+        axleCountForAxles();
       });*/
 
     $("[data-menu-underline-from-center] a").addClass("underline-from-center");
@@ -1524,7 +1524,7 @@
 
     // Load TollRoutes between Trip Start to Trip end for given axle
     function loadCalculatedTollForAxles() {
-
+      countyLayer.setMap(null);
       if (axleCount && srcRegionSelected && srcFacilitySelected && srcExitSelected &&
         desRegionSelected && desFacilitySelected && desExitSelected) {
         var tollCalcData = {
